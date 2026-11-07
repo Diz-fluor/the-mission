@@ -57,3 +57,14 @@ export function toggleMoreExpertise(root:HTMLElement,target:HTMLElement){
  const labels=button.querySelectorAll('p');labels[0].textContent=card.hidden?'Показать все':'Свернуть';if(labels[1])labels[1].textContent=card.hidden?'Ещё 1 направление':'Все направления';
  return true;
 }
+
+export function prepareSupportExplanation(root:HTMLElement){
+ const panel=root.querySelector<HTMLElement>('[data-name="Пояснение уровня"]');if(!panel)return;
+ panel.classList.add('support-explanation');panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-label','Поддержка проекта');
+ const avatar=root.querySelector<HTMLImageElement>('[data-name="Аватар · Опора сообщества"] img');
+ if(avatar)for(const image of panel.querySelectorAll<HTMLImageElement>('img')){image.src=avatar.src;image.classList.add('support-example-photo');}
+ const button=panel.querySelector<HTMLElement>('[data-name="Понятно"]');
+ if(button){button.classList.add('support-dismiss');button.setAttribute('role','button');button.tabIndex=0;button.focus({preventScroll:true});}
+ const parent=panel.parentElement;
+ if(parent)for(const sibling of [...parent.children] as HTMLElement[])if(sibling!==panel&&!sibling.dataset.name?.startsWith('Затемнение'))sibling.inert=true;
+}

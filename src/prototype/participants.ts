@@ -37,7 +37,7 @@ export function applyParticipant(root:HTMLElement,route:string,person:Person){
   if(text.includes('Основатель · ТВОЙ СТИЛЬ')){p.textContent=person.role;p.style.lineHeight='20px';p.style.fontSize='14px';}
   if(text==='≈ 500 млн ₽ · 2025')p.textContent=data.turnover;
   if(text==='225 в штате')p.textContent=data.team;
-  if(text==='Опора сообщества')p.parentElement!.style.display='none';
+  if(text==='Опора сообщества'){const badge=p.closest<HTMLElement>('[data-name="Уровень поддержки"]');if(badge)badge.style.display='none';}
  }
  const avatar=root.querySelector<HTMLImageElement>('[data-name="Аватар · Опора сообщества"] img');
  if(avatar)avatar.src=person.photo.startsWith('assets/')?import.meta.env.BASE_URL+person.photo:person.photo;

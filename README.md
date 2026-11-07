@@ -52,6 +52,8 @@ node scripts/back-check.mjs
 node scripts/composer-check.mjs
 node scripts/profile-check.mjs
 node scripts/participant-check.mjs
+node scripts/profile-center-check.mjs
+node scripts/support-info-check.mjs
 node scripts/screen-check.mjs
 ```
 

@@ -1,6 +1,6 @@
 import { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentType } from 'react';
 import { applyParticipant, participants } from './participants';
-import { prepareProfile, toggleProfileDetails, toggleMoreExpertise } from './profile';
+import { prepareProfile, prepareSupportExplanation, toggleProfileDetails, toggleMoreExpertise } from './profile';
 import { screens as capturedScreens } from '../design/registry';
 import behaviorData from '../design/behavior.json';
 import controlData from '../design/controls.json';
@@ -180,6 +180,7 @@ export function Prototype() {
       if(stateRef.current.person&&stateRef.current.person.id!=='alexander')applyParticipant(el,route,stateRef.current.person);
     }
     if(!frame&&(ownProfiles.has(route)||foreignProfiles.has(route)))prepareProfile(el,ownProfiles.has(route)||!stateRef.current.person||stateRef.current.person.id==='alexander',participants[stateRef.current.person?.name||'']?.bio||stateRef.current.person?.role);
+    if(!frame&&route==='457:5992')prepareSupportExplanation(el);
     if(!frame&&stateRef.current.person&&route.startsWith('487:')){const p=stateRef.current.person;const name=p.name;const accusative=name==='Мария Волкова'?'Марию Волкову':name==='Андрей Белов'?'Андрея Белова':name;const instrumental=name==='Мария Волкова'?'Марией Волковой':name==='Андрей Белов'?'Андреем Беловым':name;for(const text of el.querySelectorAll('p'))if(text.textContent?.includes('Александр'))text.textContent=text.textContent.replaceAll('С Александром Репиным','С '+instrumental).replaceAll('Александра Репина',accusative).replaceAll('Александр Репин',name).replaceAll('Александр принял',name.split(' ')[0]+' принял');}
     if(!frame&&route.startsWith('504:')&&stateRef.current.deal){const deal=stateRef.current.deal;for(const p of el.querySelectorAll('p')){const t=normalized(p.textContent||'');if(t==='Запуск отдела продаж')p.textContent=deal.title;if(t.includes('Воронка, регламенты')&&t.includes('обучение'))p.textContent=deal.result;if(t.includes('60 000 ₽'))p.textContent=t.replace('60 000 ₽',deal.cost||'60 000 ₽');}if(route==='504:2892'){const container=el.querySelector('[data-name^="Содержание"] [data-name="Контент"]')||el.querySelector('[data-name^="Содержание"]');if(container){const b=document.createElement('button');b.className='local-request';b.dataset.deal='current';b.textContent=deal.title+' · '+(deal.status||'Согласование');container.append(b);}}}
     if (route === '504:3133' && stateRef.current.messages.length) { const list = document.createElement('div'); list.className = 'prototype-messages'; for (const msg of stateRef.current.messages as { id: string; text: string }[]) { const p = document.createElement('p'); p.textContent = msg.text; list.append(p); } (el.querySelector('[data-name*="Содержание"]') || el.firstElementChild)?.appendChild(list); }
@@ -202,6 +203,7 @@ export function Prototype() {
     const root = stage.current; if (!root || target.closest('input,textarea,select')) return;
     if(toggleProfileDetails(target)||toggleMoreExpertise(root,target))return;
     if(target.closest('[data-back]')||normalized(target.textContent||'')==='Назад'){go('BACK');return;}
+    if(route==='457:5992'&&(target.closest('[data-name="Понятно"]')||target.closest('[data-name^="Затемнение"]'))){go(navigation.current.index>0?'BACK':profileRoute('Компании',stateRef.current.relationship[personId()]));return;}
     const consent = target.closest<HTMLElement>('[data-consent]'); if (consent) { const next = dispatch({ type: 'consent', id: consent.dataset.consent }); consent.setAttribute('aria-checked', String(next.consents[consent.dataset.consent!])); consent.classList.toggle('prototype-checked', next.consents[consent.dataset.consent!]);syncConsentButton(root,route,next.consents); return; }
     const choice = target.closest<HTMLElement>('[data-choice]'); if (choice) { dispatch({ type: 'choice', screen: route, value: choice.dataset.choice }); root.querySelectorAll('[data-choice]').forEach(n => n.setAttribute('aria-checked', String(n === choice))); return; }
     const ancestors: HTMLElement[] = []; for (let n: HTMLElement | null = target; n && n !== root; n = n.parentElement) ancestors.push(n);
