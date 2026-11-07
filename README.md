@@ -50,6 +50,7 @@ node scripts/extended-check.mjs
 node scripts/motion-check.mjs
 node scripts/back-check.mjs
 node scripts/composer-check.mjs
+node scripts/profile-check.mjs
 node scripts/screen-check.mjs
 ```
 

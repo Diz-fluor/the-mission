@@ -1,4 +1,5 @@
 import { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentType } from 'react';
+import { prepareProfile, toggleProfileDetails, toggleMoreExpertise } from './profile';
 import { screens as capturedScreens } from '../design/registry';
 import behaviorData from '../design/behavior.json';
 import controlData from '../design/controls.json';
@@ -43,6 +44,11 @@ function fitToViewport(stage: HTMLElement, frame: boolean) {
     if (/Свет/.test(name)) { child.style.width = '100%'; child.style.top = '0'; continue; }
     const m = measurements.find(m => m.n === child)!;
     if (/Таббар/.test(name)) { child.style.top = 'auto'; child.style.bottom = 'calc(12px + env(safe-area-inset-bottom, 0px))'; child.style.width = 'calc(100% - 32px)'; for (const item of [...child.children] as HTMLElement[]) if (getComputedStyle(item).position !== 'absolute') { item.style.flex = '1 1 0'; item.style.width = '0'; item.style.minWidth = '0'; } continue; }
+    if(name==='Profile / Scroll content'){
+      child.style.height='calc(100% - 100px - var(--safe-top) - env(safe-area-inset-bottom, 0px))';
+      child.style.marginTop='var(--safe-top)';child.style.flexShrink='0';child.style.overflowY='auto';child.style.paddingBottom='24px';
+      continue;
+    }
     if (m.style.position === 'absolute' && m.top >= offset - 4) {
       const top = Math.max(0, m.top - offset); child.style.top = `calc(${top}px + var(--safe-top))`;
       if (m.top > 650 && m.h <= 76) { child.style.top = 'auto'; child.style.bottom = 'calc(16px + env(safe-area-inset-bottom, 0px))'; }
@@ -179,6 +185,7 @@ export function Prototype() {
         if(content){const card=document.createElement('div');card.className='choice';const text=document.createElement('p');text.textContent=route==='729:5891'?'Участник пока не добавил запросы':route==='729:6028'?'Участник пока не добавил экспертизы':person.role;card.append(text);content.replaceChildren(card);}
       }
     }
+    if(!frame&&(ownProfiles.has(route)||foreignProfiles.has(route)))prepareProfile(el,ownProfiles.has(route)||!stateRef.current.person||stateRef.current.person.id==='alexander',stateRef.current.person?.role);
     if(!frame&&stateRef.current.person&&route.startsWith('487:')){const p=stateRef.current.person;const name=p.name;const accusative=name==='Мария Волкова'?'Марию Волкову':name==='Андрей Белов'?'Андрея Белова':name;const instrumental=name==='Мария Волкова'?'Марией Волковой':name==='Андрей Белов'?'Андреем Беловым':name;for(const text of el.querySelectorAll('p'))if(text.textContent?.includes('Александр'))text.textContent=text.textContent.replaceAll('С Александром Репиным','С '+instrumental).replaceAll('Александра Репина',accusative).replaceAll('Александр Репин',name).replaceAll('Александр принял',name.split(' ')[0]+' принял');}
     if(!frame&&route.startsWith('504:')&&stateRef.current.deal){const deal=stateRef.current.deal;for(const p of el.querySelectorAll('p')){const t=normalized(p.textContent||'');if(t==='Запуск отдела продаж')p.textContent=deal.title;if(t.includes('Воронка, регламенты')&&t.includes('обучение'))p.textContent=deal.result;if(t.includes('60 000 ₽'))p.textContent=t.replace('60 000 ₽',deal.cost||'60 000 ₽');}if(route==='504:2892'){const container=el.querySelector('[data-name^="Содержание"] [data-name="Контент"]')||el.querySelector('[data-name^="Содержание"]');if(container){const b=document.createElement('button');b.className='local-request';b.dataset.deal='current';b.textContent=deal.title+' · '+(deal.status||'Согласование');container.append(b);}}}
     if (route === '504:3133' && stateRef.current.messages.length) { const list = document.createElement('div'); list.className = 'prototype-messages'; for (const msg of stateRef.current.messages as { id: string; text: string }[]) { const p = document.createElement('p'); p.textContent = msg.text; list.append(p); } (el.querySelector('[data-name*="Содержание"]') || el.firstElementChild)?.appendChild(list); }
@@ -199,6 +206,7 @@ export function Prototype() {
 
   const activate = useCallback((target: HTMLElement) => {
     const root = stage.current; if (!root || target.closest('input,textarea,select')) return;
+    if(toggleProfileDetails(target)||toggleMoreExpertise(root,target))return;
     if(target.closest('[data-back]')||normalized(target.textContent||'')==='Назад'){go('BACK');return;}
     const consent = target.closest<HTMLElement>('[data-consent]'); if (consent) { const next = dispatch({ type: 'consent', id: consent.dataset.consent }); consent.setAttribute('aria-checked', String(next.consents[consent.dataset.consent!])); consent.classList.toggle('prototype-checked', next.consents[consent.dataset.consent!]);syncConsentButton(root,route,next.consents); return; }
     const choice = target.closest<HTMLElement>('[data-choice]'); if (choice) { dispatch({ type: 'choice', screen: route, value: choice.dataset.choice }); root.querySelectorAll('[data-choice]').forEach(n => n.setAttribute('aria-checked', String(n === choice))); return; }
@@ -224,7 +232,7 @@ export function Prototype() {
     if(label==='Опора сообщества'){go('457:5992');return;}
     if(/^Видео ·/.test(name)||name.includes('/ Видео ·')){say('В прототипе видео доступно как превью');return;}
     const company=ancestors.find(n=>['ТВОЙ СТИЛЬ','TREND PRO','GOOD JOB'].includes(n.dataset.name||''));if(company){const collapsed=company.dataset.collapsed!=='true';company.dataset.collapsed=String(collapsed);company.setAttribute('aria-expanded',String(!collapsed));[...company.children].slice(1).forEach(n=>(n as HTMLElement).style.display=collapsed?'none':'');return;}
-    if(label==='Подробнее о человеке'){const box=ancestors.find(n=>n.dataset.name==='О себе');if(box){const old=box.querySelector('.profile-details');if(old){old.remove();box.style.height='44px';}else{const details=document.createElement('p');details.className='profile-details';details.textContent=stateRef.current.person?.role||'Предприниматель. Развитие бизнеса, команды и совместные проекты';box.style.height='auto';box.style.flexWrap='wrap';details.style.flexBasis='100%';box.append(details);}}return;}
+
     if(/Скопировать/.test(label)){void navigator.clipboard.writeText(location.origin+location.pathname+'?screen=464%3A1674&invite=demo').then(()=>say('Ссылка на прототип скопирована')).catch(()=>say('Не удалось скопировать ссылку'));return;}
     const localRequest=target.closest<HTMLElement>('[data-request]');if(localRequest){dispatch({type:'selectRequest',id:localRequest.dataset.request});go('503:2556');return;}
     if(route==='503:2556'&&label==='Изменить запрос'&&stateRef.current.selectedRequest){go('503:2896');return;}
