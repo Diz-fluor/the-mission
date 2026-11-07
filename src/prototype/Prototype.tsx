@@ -5,7 +5,7 @@ import controlData from '../design/controls.json';
 import manifest from '../../docs/figma-screens.json';
 import { STORAGE_KEY, initialState, restoreState, transition, profileRoute, consentReady } from './state.mjs';
 import { getTelegram, initializeTelegram, isTelegram } from './telegram';
-import { appendMessage, isPersonNode, personFromCard, refreshPeople, showRequestRecords, syncConsentButton, syncAmount, localPhoto, photoUrl, type Person } from './dom';
+import { appendMessage, isPersonNode, personFromCard, refreshPeople, showRequestRecords, syncConsentButton, syncAmount, syncComposer, localPhoto, photoUrl, type Person } from './dom';
 
 type DemoState = { relationship: Record<string, string>; recommendations: Record<string, string>; fields: Record<string, string>; consents: Record<string, boolean>; choices: Record<string, string>; person: Person | null; saved: string[]; savedPeople:Record<string,Person>; requests: { id: string; title: string; description: string; closed?:boolean }[]; selectedRequest:string|null; messages: { id: string; text: string }[]; query: string; filter: string; criteria:Record<string,string>; contribution: number; amount: number; payment:{id:string;amount:number;status:string}|null; deal:Record<string,string>|null };
 type Action = { id: string; to: string; event?: string; delay?: number };
@@ -67,8 +67,8 @@ function fitToViewport(stage: HTMLElement, frame: boolean) {
 function StateView({ id, go }: { id: string; go: (id: string) => void }) {
   const name = manifest.screens.find(s => s.id === id)?.name.replace(/^\S+\s*·\s*/, '') || 'Сообщество';
   if (id === '506:4521') return <main className="state-screen"><div className="ai-loading" aria-hidden="true"/><h1>Подбираю участников</h1><p>Ищу тех, кто может помочь с вашей задачей</p></main>;
-  if (id === '506:4051' || id === '506:4090') return <main className="state-screen"><button className="back" onClick={() => history.back()}>Назад</button><h1>{id === '506:4051' ? 'Тип запроса' : 'Причина обращения'}</h1>{(id === '506:4051' ? ['Помощь с задачей', 'Обмен опытом', 'Партнёрство'] : ['Недостоверные сведения', 'Нежелательное общение', 'Другое']).map(t => <label className="choice" key={t}><input name="reason" type="radio"/>{t}</label>)}<button className="native-primary" onClick={() => go(id === '506:4051' ? '503:2596' : '505:3942')}>Применить <span>→</span></button></main>;
-  if (id === '509:4282') return <main className="state-screen"><h1>Действия с участником</h1>{[['Рекомендовать', '487:1972'], ['Пожаловаться', '505:3942'], ['Заблокировать', '505:3982']].map(([t, to]) => <button className="choice" key={to} onClick={() => go(to)}>{t}<span>›</span></button>)}<button className="quiet" onClick={() => history.back()}>Назад</button></main>;
+  if (id === '506:4051' || id === '506:4090') return <main className="state-screen"><button className="back" onClick={e => {e.stopPropagation();go('BACK');}}>Назад</button><h1>{id === '506:4051' ? 'Тип запроса' : 'Причина обращения'}</h1>{(id === '506:4051' ? ['Помощь с задачей', 'Обмен опытом', 'Партнёрство'] : ['Недостоверные сведения', 'Нежелательное общение', 'Другое']).map(t => <label className="choice" key={t}><input name="reason" type="radio"/>{t}</label>)}<button className="native-primary" onClick={() => go(id === '506:4051' ? '503:2596' : '505:3942')}>Применить <span>→</span></button></main>;
+  if (id === '509:4282') return <main className="state-screen"><h1>Действия с участником</h1>{[['Рекомендовать', '487:1972'], ['Пожаловаться', '505:3942'], ['Заблокировать', '505:3982']].map(([t, to]) => <button className="choice" key={to} onClick={() => go(to)}>{t}<span>›</span></button>)}<button className="quiet" onClick={e => {e.stopPropagation();go('BACK');}}>Назад</button></main>;
   const content: Record<string, [string, string, string, string]> = {
     '506:4012': ['Проверьте запрос', 'Добавьте название и описание задачи', 'К редактированию', '503:2596'],
     '506:4193': ['Приглашение отозвано', 'По этой ссылке больше нельзя вступить в сообщество', 'К приглашениям', '505:4121'],
@@ -80,7 +80,7 @@ function StateView({ id, go }: { id: string; go: (id: string) => void }) {
     '506:4262': ['Как прошла встреча участников', 'Знакомства, идеи и новые проекты', 'Все новости', '488:2206'],
   };
   const [title, text, label, to] = content[id] || [name, 'Можно вернуться к основному разделу', 'На главную', HOME];
-  return <main className="state-screen"><button className="back" onClick={() => history.back()}>Назад</button><h1>{title}</h1><p>{text}</p><button className="native-primary" onClick={() => go(to)}>{label}<span>→</span></button></main>;
+  return <main className="state-screen"><button className="back" onClick={e => {e.stopPropagation();go('BACK');}}>Назад</button><h1>{title}</h1><p>{text}</p><button className="native-primary" onClick={() => go(to)}>{label}<span>→</span></button></main>;
 }
 
 export function Prototype() {
@@ -102,7 +102,7 @@ export function Prototype() {
   const personId = () => stateRef.current.person?.id || 'alexander';
   const go = useCallback((to: string) => {
     const request=++navigationRequest.current;
-    if (to === 'BACK') { if (history.length > 1) history.back(); else location.hash = '/'+HOME; return; }
+    if (to === 'BACK') { if (navigation.current.index > 0) history.back(); else location.hash = '/'+HOME; return; }
     if (to === '457:5863') to = profileRoute('Компании', stateRef.current.relationship[stateRef.current.person?.id || 'alexander']);
     const commit=()=>{if(request===navigationRequest.current)location.hash='/'+to;};
     // Keep the current screen visible until the next screen's code is ready.
@@ -120,6 +120,11 @@ export function Prototype() {
     const el = stage.current; if (!el || !el.firstElementChild || el.querySelector('.loading-placeholder')) return;
     fitToViewport(el, frame);
     for (const a of behaviors.get(route) || []) { const n = find(el, a.id); if (n && a.event !== 'AFTER_TIMEOUT') { n.setAttribute('role', 'button'); n.tabIndex = 0; } }
+    for(const icon of el.querySelectorAll<HTMLElement>('[data-name*="arrow-left"],[data-name*="chevron-left"],[data-name="Назад"]')) {
+      const button=icon.closest<HTMLElement>('[data-name="Назад"]')||icon;
+      button.dataset.back='true';button.setAttribute('role','button');button.setAttribute('aria-label','Назад');button.tabIndex=0;button.classList.add('prototype-back');
+      if(getComputedStyle(button).position==='static')button.style.position='relative';
+    }
     const makeInput = (node: HTMLElement | null, id: string, label: string, multiline = false, query = false) => {
       if (!node || node.tagName === 'INPUT' || node.tagName === 'TEXTAREA') return;
       const input = document.createElement(multiline ? 'textarea' : 'input');
@@ -147,7 +152,8 @@ export function Prototype() {
         else { const n = find(el, c.id); if (n) { if(c.name.includes('Radio Row')){n.dataset.choice=c.texts.map(t=>t.text).join(' ');n.setAttribute('role','radio');n.setAttribute('aria-checked',String((stateRef.current.choices[route]||(route==='487:1972'?'Работали вместе':''))===n.dataset.choice));}else{n.dataset.consent=c.id;n.setAttribute('role','checkbox');n.setAttribute('aria-checked',String(Boolean(stateRef.current.consents[c.id])));}n.tabIndex=0; } }
       }
       for (const n of el.querySelectorAll<HTMLElement>('[data-name="Поле"]')) { const p = n.querySelector<HTMLElement>('p'); if (p) makeInput(p, n.dataset.nodeId || '', n.parentElement?.querySelector('p')?.textContent || 'Значение'); }
-      for (const n of el.querySelectorAll<HTMLElement>('[data-name*="Composer"]')) { const p = n.querySelector<HTMLElement>('p'); if (p) makeInput(p, 'composer', 'Сообщение', true); }
+      for (const n of el.querySelectorAll<HTMLElement>('[data-name*="Composer"]')) { const p = n.querySelector<HTMLElement>('p'); if (p) makeInput(p, 'composer', 'Сообщение', true); n.classList.add('prototype-composer'); }
+      syncComposer(el);
       if (route === HOME) makeInput(find(el, '464:2035'), 'search', 'Поиск участников', false, true);
       if(route==='487:1972'){const box=el.querySelector<HTMLElement>('[data-name="Что делали вместе"]');const ps=box?.querySelectorAll<HTMLElement>('p');if(ps?.length)makeInput(ps[ps.length-1],box!.dataset.nodeId||'recommendation','Что делали вместе',true);}
       for (const p of el.querySelectorAll('p')) if (/Принимаю правила|Согласен на обработку|Согласен на обработку|Согласен на публикацию/.test(p.textContent || '')) { const n = p.parentElement!; n.dataset.consent = /Принимаю/.test(p.textContent||'')?'rules':/публикацию/.test(p.textContent||'')?'publication':'privacy'; n.tabIndex = 0; n.setAttribute('role', 'checkbox'); n.setAttribute('aria-checked', String(Boolean(stateRef.current.consents[n.dataset.consent]))); }
@@ -192,6 +198,7 @@ export function Prototype() {
 
   const activate = useCallback((target: HTMLElement) => {
     const root = stage.current; if (!root || target.closest('input,textarea,select')) return;
+    if(target.closest('[data-back]')||normalized(target.textContent||'')==='Назад'){go('BACK');return;}
     const consent = target.closest<HTMLElement>('[data-consent]'); if (consent) { const next = dispatch({ type: 'consent', id: consent.dataset.consent }); consent.setAttribute('aria-checked', String(next.consents[consent.dataset.consent!])); consent.classList.toggle('prototype-checked', next.consents[consent.dataset.consent!]);syncConsentButton(root,route,next.consents); return; }
     const choice = target.closest<HTMLElement>('[data-choice]'); if (choice) { dispatch({ type: 'choice', screen: route, value: choice.dataset.choice }); root.querySelectorAll('[data-choice]').forEach(n => n.setAttribute('aria-checked', String(n === choice))); return; }
     const ancestors: HTMLElement[] = []; for (let n: HTMLElement | null = target; n && n !== root; n = n.parentElement) ancestors.push(n);
@@ -224,8 +231,8 @@ export function Prototype() {
     if(target.closest('[data-deal]')){go(({Согласование:'504:3003',Работа:'504:3088',Проверка:'504:3212',Завершена:'504:3284',Отменена:'504:3527'} as Record<string,string>)[stateRef.current.deal?.status||'Согласование']||'504:3003');return;}
     const card = ancestors.find(isPersonNode);
     if (card && !ownProfiles.has(route)) { if(route==='504:3625'){dispatch({type:'choice',screen:route,value:personFromCard(card).name});card.classList.add('prototype-checked');return;}dispatch({ type: 'person', person:personFromCard(card) }); go('457:5863'); return; }
-    if (route.startsWith('489:') && /Отправить/.test(name)) { go('506:4521'); return; }
-    if (route === '504:3133' && /Отправить/.test(name)) { const input = root.querySelector<HTMLTextAreaElement>('[data-field="composer"]'); if (input?.value.trim()) { dispatch({ type: 'message', id: crypto.randomUUID(), text: input.value });appendMessage(root,input.value); input.value = ''; } return; }
+    if (route.startsWith('489:') && /Отправить/.test(name)) { const input=root.querySelector<HTMLTextAreaElement>('[data-field="composer"]');if(!input?.value.trim())return;go('506:4521');return; }
+    if (route === '504:3133' && /Отправить/.test(name)) { const input = root.querySelector<HTMLTextAreaElement>('[data-field="composer"]'); if (input?.value.trim()) { dispatch({ type: 'message', id: crypto.randomUUID(), text: input.value });appendMessage(root,input.value); input.value = '';syncComposer(root); } return; }
     const actions = behaviors.get(route) || [];
     const action = ancestors.map(n => actions.find(a => a.id === n.dataset.nodeId && a.event !== 'AFTER_TIMEOUT')).find(Boolean);
     let to = action?.to || captions[label];
@@ -252,5 +259,5 @@ export function Prototype() {
   }, [route, dispatch, go, say]);
 
   if (catalog) return <main className="screen-catalog"><h1>Экраны прототипа</h1><p>{Object.keys(registry).length} экранов перенесены из Figma. Для 12 дополнительных состояний используются общие шаблоны до визуальной сверки.</p><input aria-label="Найти экран" placeholder="Найти экран" value={catalogQuery} onChange={e => setCatalogQuery(e.target.value)}/><div>{manifest.screens.filter(s => s.name.toLowerCase().includes(catalogQuery.toLowerCase())).map(s => <a key={s.id} href={`?screen=${encodeURIComponent(s.id)}`}><span>{s.name}</span>{!registry[s.id] && <small>Нужно сравнить</small>}</a>)}</div></main>;
-  return <div className={frame ? 'prototype-shell framed' : 'prototype-shell'}><div key={route} ref={stage} className="design-stage" data-screen={route} data-loaded={loaded} onClick={e => { if ((e.target as HTMLElement).closest('input,textarea,select')) return; e.preventDefault(); activate(e.target as HTMLElement); }} onKeyDown={e => { const target = e.target as HTMLElement; if (e.key === 'Enter' && target.matches('[data-query]')) { go('505:3464'); return; } if ((e.key === 'Enter' || e.key === ' ') && !target.matches('input,textarea,select')) { e.preventDefault(); activate(target); } }} onInput={e => { const t = e.target as HTMLInputElement; if(t.dataset.amount){const n=Number(t.value.replace(/\s/g,''));const next=storeInput({type:'amount',value:Number.isFinite(n)&&n>0?n:0});if(stage.current)syncAmount(stage.current,next.amount);return;}if (t.dataset.field) storeInput(t.dataset.query ? { type: 'query', value: t.value } : { type: 'field', id: t.dataset.field, value: t.value }); }}><Suspense fallback={<div className="loading-placeholder" aria-label="Загрузка экрана"/>}>{Component ? <Component/> : <StateView id={route} go={go}/>}</Suspense></div>{notice && <div className="prototype-toast" role="status">{notice}<button aria-label="Закрыть уведомление" onClick={() => setNotice('')}>×</button></div>}</div>;
+  return <div className={frame ? 'prototype-shell framed' : 'prototype-shell'}><div key={route} ref={stage} className="design-stage" data-screen={route} data-loaded={loaded} onClick={e => { if ((e.target as HTMLElement).closest('input,textarea,select')) return; e.preventDefault(); activate(e.target as HTMLElement); }} onKeyDown={e => { const target = e.target as HTMLElement; if (e.key === 'Enter' && target.matches('[data-query]')) { go('505:3464'); return; } if ((e.key === 'Enter' || e.key === ' ') && !target.matches('input,textarea,select')) { e.preventDefault(); activate(target); } }} onInput={e => { const t = e.target as HTMLInputElement; if(t.dataset.amount){const n=Number(t.value.replace(/\s/g,''));const next=storeInput({type:'amount',value:Number.isFinite(n)&&n>0?n:0});if(stage.current)syncAmount(stage.current,next.amount);return;}if (t.dataset.field) {storeInput(t.dataset.query ? { type: 'query', value: t.value } : { type: 'field', id: t.dataset.field, value: t.value });if(t.dataset.field==='composer'&&stage.current)syncComposer(stage.current);} }}><Suspense fallback={<div className="loading-placeholder" aria-label="Загрузка экрана"/>}>{Component ? <Component/> : <StateView id={route} go={go}/>}</Suspense></div>{notice && <div className="prototype-toast" role="status">{notice}<button aria-label="Закрыть уведомление" onClick={() => setNotice('')}>×</button></div>}</div>;
 }

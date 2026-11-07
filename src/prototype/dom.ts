@@ -1,6 +1,13 @@
 export type Person = { id: string; name: string; photo: string; role: string };
 export const localPhoto=(src:string)=>src.includes('/assets/')?'assets/'+src.split('/assets/').pop():src;
 export const photoUrl=(src:string)=>localPhoto(src).startsWith('assets/')?import.meta.env.BASE_URL+localPhoto(src):src;
+export function syncComposer(root:HTMLElement){
+ for(const composer of root.querySelectorAll<HTMLElement>('[data-name*="Composer"]')){
+  const input=composer.querySelector<HTMLTextAreaElement>('[data-field="composer"]');
+  const send=composer.querySelector<HTMLElement>('[data-name="Отправить"]');
+  if(send){send.setAttribute('role','button');send.setAttribute('aria-label','Отправить сообщение');send.setAttribute('aria-disabled',String(!input?.value.trim()));send.tabIndex=0;}
+ }
+}
 export function isPersonNode(n: HTMLElement) { return ['Андрей Белов','Мария Волкова','Александр Репин'].includes(n.dataset.name || '') || /\/Person\//.test(n.dataset.name || ''); }
 export function personFromCard(n: HTMLElement): Person {
  const copy = n.querySelector('[data-name="Имя и деятельность"]') || n;
