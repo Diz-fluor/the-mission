@@ -1,0 +1,34 @@
+import {chromium} from 'playwright';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({headless:true});
+try{
+ const page=await browser.newPage({viewport:{width:393,height:852}});
+ page.setDefaultTimeout(8000);
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const open=async id=>{await page.goto('http://127.0.0.1:5173/?screen='+encodeURIComponent(id));await at(id);};
+ const at=id=>page.waitForSelector(`[data-screen="${id}"][data-loaded=true]`);
+ const state=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('the-mission-prototype-v1')));
+ await open('464:2016');
+ await page.getByRole('button',{name:'Сохранить участника',exact:true}).first().click();
+ const saved=(await state()).savedPeople[(await state()).saved[0]];
+ assert.ok(saved.name);
+ await open('505:3352');await page.getByRole('button',{name:'Открыть профиль: '+saved.name,exact:true}).click();await at('457:5863');
+ assert.ok((await page.locator('.design-stage').innerText()).includes(saved.name));
+ await page.getByText('Запросы',{exact:true}).first().click();await at('729:5891');
+ await page.getByText('Экспертизы',{exact:true}).click();await at('729:6028');
+ await open('464:2016');await page.getByLabel('Поиск участников').fill('небывалоеимя');await page.getByLabel('Поиск участников').press('Enter');await at('505:3464');
+ assert.match(await page.locator('.local-empty').innerText(),/Никого не нашли/);
+ await open('504:3133');await page.getByLabel('Сообщение',{exact:true}).fill('Проверка сообщения');await page.locator('[data-name="Отправить"]').click();
+ assert.equal((await state()).messages.at(-1).text,'Проверка сообщения');
+ await page.reload();await at('504:3133');assert.equal(await page.getByText('Проверка сообщения',{exact:true}).count(),1);
+ await open('504:2951');
+ const inputs=page.locator('.prototype-input');
+ const values=['Мария Волкова','Проверка сделки','Готовый результат','15000','20 ноября'];
+ assert.equal(await inputs.count(),values.length);
+ for(let i=0;i<values.length;i++)await inputs.nth(i).fill(values[i]);
+ await page.getByText('На согласование',{exact:true}).click();
+ assert.equal((await state()).deal.title,'Проверка сделки');
+ await open('504:2892');await page.locator('[data-deal="current"]').click();await at('504:3003');
+ assert.deepEqual(errors,[]);
+ console.log('Extended: saved profile, tabs, empty search, persisted chat and local deal passed');
+}finally{await browser.close();}

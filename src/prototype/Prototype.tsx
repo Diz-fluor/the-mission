@@ -88,6 +88,9 @@ export function Prototype() {
   const [state, setState] = useState<DemoState>(storedState);
   const stateRef = useRef(state);
   const stage = useRef<HTMLDivElement>(null);
+  const motion = useRef<'none'|'section'|'forward'|'back'>('none');
+  const navigation = useRef({route:currentRoute(),index:0});
+  const navigationRequest = useRef(0);
   const [notice, setNotice] = useState('');
   const [loaded, setLoaded] = useState(false);
   const [catalogQuery, setCatalogQuery] = useState('');
@@ -97,9 +100,17 @@ export function Prototype() {
   const dispatch = useCallback((action: object) => { const next = transition(stateRef.current, action) as DemoState; stateRef.current = next; setState(next); try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch { /* The prototype also works without persistence. */ } return next; }, []);
   const storeInput = useCallback((action:object)=>{const next=transition(stateRef.current,action) as DemoState;stateRef.current=next;try{localStorage.setItem(STORAGE_KEY,JSON.stringify(next));}catch{/* Editing remains available without storage. */}return next;},[]);
   const personId = () => stateRef.current.person?.id || 'alexander';
-  const go = useCallback((to: string) => { if (to === 'BACK') { if (history.length > 1) history.back(); else location.hash = '/'+HOME; return; } if (to === '457:5863') to = profileRoute('Компании', stateRef.current.relationship[stateRef.current.person?.id || 'alexander']); location.hash = '/'+to; }, []);
+  const go = useCallback((to: string) => {
+    const request=++navigationRequest.current;
+    if (to === 'BACK') { if (history.length > 1) history.back(); else location.hash = '/'+HOME; return; }
+    if (to === '457:5863') to = profileRoute('Компании', stateRef.current.relationship[stateRef.current.person?.id || 'alexander']);
+    const commit=()=>{if(request===navigationRequest.current)location.hash='/'+to;};
+    // Keep the current screen visible until the next screen's code is ready.
+    if(registry[to])void registry[to]().then(commit).catch(()=>setNotice('Не удалось загрузить экран. Попробуйте ещё раз'));
+    else commit();
+  }, []);
   const say = useCallback((text: string) => { setNotice(text); }, []);
-  useEffect(() => { if (isTelegram()) initializeTelegram(); const update = () => { setLoaded(false); setRoute(currentRoute()); }; window.addEventListener('hashchange', update); return () => window.removeEventListener('hashchange', update); }, []);
+  useEffect(() => { if (isTelegram()) initializeTelegram(); history.replaceState({...history.state,missionIndex:0},''); const sections=new Set([HOME,'503:2497','504:2892','678:14745','563:4968']); const update = () => {const next=currentRoute();if(next===navigation.current.route)return;const previous=navigation.current;const index=typeof history.state?.missionIndex==='number'?history.state.missionIndex:previous.index+1;history.replaceState({...history.state,missionIndex:index},'');motion.current=index<previous.index?'back':sections.has(next)&&sections.has(previous.route)?'section':'forward';navigation.current={route:next,index};setLoaded(false);setRoute(next);}; window.addEventListener('hashchange', update); return () => window.removeEventListener('hashchange', update); }, []);
   useEffect(() => { if (!notice) return; const t = setTimeout(() => setNotice(''), 4000); return () => clearTimeout(t); }, [notice]);
   useEffect(() => { const back = getTelegram()?.BackButton; if (!isTelegram() || !back) return; const handle = () => go('BACK'); route === HOME ? back.hide() : back.show(); back.onClick(handle); return () => back.offClick(handle); }, [route, go]);
   useEffect(() => { if (route !== '506:4521') return; const t = setTimeout(() => go('489:2257'), 1200); return () => clearTimeout(t); }, [route, go]);
@@ -164,13 +175,18 @@ export function Prototype() {
     if(!frame&&stateRef.current.person&&route.startsWith('487:')){const p=stateRef.current.person;const name=p.name;const accusative=name==='Мария Волкова'?'Марию Волкову':name==='Андрей Белов'?'Андрея Белова':name;const instrumental=name==='Мария Волкова'?'Марией Волковой':name==='Андрей Белов'?'Андреем Беловым':name;for(const text of el.querySelectorAll('p'))if(text.textContent?.includes('Александр'))text.textContent=text.textContent.replaceAll('С Александром Репиным','С '+instrumental).replaceAll('Александра Репина',accusative).replaceAll('Александр Репин',name).replaceAll('Александр принял',name.split(' ')[0]+' принял');}
     if(!frame&&route.startsWith('504:')&&stateRef.current.deal){const deal=stateRef.current.deal;for(const p of el.querySelectorAll('p')){const t=normalized(p.textContent||'');if(t==='Запуск отдела продаж')p.textContent=deal.title;if(t.includes('Воронка, регламенты')&&t.includes('обучение'))p.textContent=deal.result;if(t.includes('60 000 ₽'))p.textContent=t.replace('60 000 ₽',deal.cost||'60 000 ₽');}if(route==='504:2892'){const container=el.querySelector('[data-name^="Содержание"] [data-name="Контент"]')||el.querySelector('[data-name^="Содержание"]');if(container){const b=document.createElement('button');b.className='local-request';b.dataset.deal='current';b.textContent=deal.title+' · '+(deal.status||'Согласование');container.append(b);}}}
     if (route === '504:3133' && stateRef.current.messages.length) { const list = document.createElement('div'); list.className = 'prototype-messages'; for (const msg of stateRef.current.messages as { id: string; text: string }[]) { const p = document.createElement('p'); p.textContent = msg.text; list.append(p); } (el.querySelector('[data-name*="Содержание"]') || el.firstElementChild)?.appendChild(list); }
+    if(!frame&&motion.current!=='none'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const direction=motion.current;
+      el.animate([{opacity:direction==='section'?0.35:0.6,transform:direction==='section'?'translateY(6px)':`translateX(${direction==='back'?-20:20}px)`},{opacity:1,transform:direction==='section'?'translateY(0)':'translateX(0)'}],{duration:direction==='section'?200:260,easing:'cubic-bezier(0.22, 1, 0.36, 1)'});
+    }
+    motion.current='none';
     setLoaded(true);
   }, [route, frame, dispatch]);
   useLayoutEffect(() => {
     const el = stage.current; if (!el) return;
-    const observer = new MutationObserver(() => { if (el.querySelector('[data-node-id]') && !el.dataset.prepared) { el.dataset.prepared = 'true'; initializeView(); } });
+    const observer = new MutationObserver(() => { if (el.querySelector('[data-node-id],.state-screen') && !el.dataset.prepared) { el.dataset.prepared = 'true'; initializeView(); } });
     observer.observe(el, { childList: true, subtree: true });
-    if (el.querySelector('[data-node-id]')) { el.dataset.prepared = 'true'; initializeView(); }
+    if (el.querySelector('[data-node-id],.state-screen')) { el.dataset.prepared = 'true'; initializeView(); }
     return () => { observer.disconnect(); delete el.dataset.prepared; };
   }, [route, initializeView]);
 
