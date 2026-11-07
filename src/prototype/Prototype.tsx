@@ -5,7 +5,7 @@ import controlData from '../design/controls.json';
 import manifest from '../../docs/figma-screens.json';
 import { STORAGE_KEY, initialState, restoreState, transition, profileRoute, consentReady } from './state.mjs';
 import { getTelegram, initializeTelegram, isTelegram } from './telegram';
-import { appendMessage, isPersonNode, personFromCard, refreshPeople, showRequestRecords, syncConsentButton, syncAmount, syncComposer, localPhoto, photoUrl, type Person } from './dom';
+import { appendMessage, isPersonNode, personFromCard, refreshPeople, showRequestRecords, syncConsentButton, syncAmount, syncComposer, syncHomeFilters, localPhoto, photoUrl, type Person } from './dom';
 
 type DemoState = { relationship: Record<string, string>; recommendations: Record<string, string>; fields: Record<string, string>; consents: Record<string, boolean>; choices: Record<string, string>; person: Person | null; saved: string[]; savedPeople:Record<string,Person>; requests: { id: string; title: string; description: string; closed?:boolean }[]; selectedRequest:string|null; messages: { id: string; text: string }[]; query: string; filter: string; criteria:Record<string,string>; contribution: number; amount: number; payment:{id:string;amount:number;status:string}|null; deal:Record<string,string>|null };
 type Action = { id: string; to: string; event?: string; delay?: number };
@@ -157,6 +157,7 @@ export function Prototype() {
       if (route === HOME) makeInput(find(el, '464:2035'), 'search', 'Поиск участников', false, true);
       if(route==='487:1972'){const box=el.querySelector<HTMLElement>('[data-name="Что делали вместе"]');const ps=box?.querySelectorAll<HTMLElement>('p');if(ps?.length)makeInput(ps[ps.length-1],box!.dataset.nodeId||'recommendation','Что делали вместе',true);}
       for (const p of el.querySelectorAll('p')) if (/Принимаю правила|Согласен на обработку|Согласен на обработку|Согласен на публикацию/.test(p.textContent || '')) { const n = p.parentElement!; n.dataset.consent = /Принимаю/.test(p.textContent||'')?'rules':/публикацию/.test(p.textContent||'')?'publication':'privacy'; n.tabIndex = 0; n.setAttribute('role', 'checkbox'); n.setAttribute('aria-checked', String(Boolean(stateRef.current.consents[n.dataset.consent]))); }
+      if(route===HOME)syncHomeFilters(el,stateRef.current.filter);
       refreshPeople(el,route,stateRef.current);
       showRequestRecords(el,route,stateRef.current.requests,stateRef.current.selectedRequest);
       syncConsentButton(el,route,stateRef.current.consents);
@@ -212,7 +213,7 @@ export function Prototype() {
     if (foreignProfiles.has(route) && ['Компании', 'Запросы', 'Экспертизы'].includes(label)) { go(profileRoute(label, stateRef.current.relationship[personId()])); return; }
     if (foreignProfiles.has(route) && label === 'Запрос отправлен') { say('Запрос уже отправлен. Ожидайте ответа участника'); return; }
     if (label === 'Написать' || /НАПИСАТЬ В TELEGRAM|ОТПРАВИТЬ В TELEGRAM|Написать андрею|В Telegram/.test(label)) { say('В прототипе сообщение не отправляется'); return; }
-    if (route === HOME && ['Все', 'Мои', 'Новые'].includes(label)) { const next=dispatch({ type: 'filter', value: label }); const chips = root.querySelector('[data-name="Направления"]'); chips?.querySelectorAll('p').forEach(p => p.parentElement?.classList.toggle('prototype-chip-active', p.textContent?.trim() === label));refreshPeople(root,route,next); return; }
+    if (route === HOME && ['Все', 'Мои', 'Новые'].includes(label)) { const next=dispatch({ type: 'filter', value: label }); syncHomeFilters(root,next.filter);refreshPeople(root,route,next); return; }
     if (/Фильтры/.test(name) && route === HOME) { go('505:3550'); return; }
     if (/Уведомления · открыть/.test(name)) { go('505:3645'); return; }
     if(label==='Мои запросы'||route==='503:2497'&&label==='Мои'){go('503:2842');return;}

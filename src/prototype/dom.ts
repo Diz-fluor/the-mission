@@ -1,6 +1,15 @@
 export type Person = { id: string; name: string; photo: string; role: string };
 export const localPhoto=(src:string)=>src.includes('/assets/')?'assets/'+src.split('/assets/').pop():src;
 export const photoUrl=(src:string)=>localPhoto(src).startsWith('assets/')?import.meta.env.BASE_URL+localPhoto(src):src;
+export function syncHomeFilters(root:HTMLElement,selected:string){
+ const group=root.querySelector<HTMLElement>('[data-name="Направления"]');
+ if(!group)return;
+ group.setAttribute('role','radiogroup');group.setAttribute('aria-label','Участники сообщества');
+ for(const chip of [...group.children] as HTMLElement[]){
+  chip.classList.add('prototype-chip');chip.setAttribute('role','radio');chip.tabIndex=0;
+  chip.setAttribute('aria-checked',String(chip.textContent?.trim()===selected));
+ }
+}
 export function syncComposer(root:HTMLElement){
  for(const composer of root.querySelectorAll<HTMLElement>('[data-name*="Composer"]')){
   const input=composer.querySelector<HTMLTextAreaElement>('[data-field="composer"]');
