@@ -7,7 +7,7 @@ const imgTheMissionIconLocalXClose22 = asset("assets/008777cc-dd08-4982-9c80-52b
 const img1 = asset("assets/03805a59-b953-4680-9b42-877ac303f158.png");
 const img2 = asset("assets/24ca7d52-0300-48a5-9966-d9f6a5eed0ad.png");
 const img = asset("assets/a4f67a57-c113-419f-8bbd-08f518693cc9.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 
 function TheMissionIconChevronDown({ className }: { className?: string }) {
   return (

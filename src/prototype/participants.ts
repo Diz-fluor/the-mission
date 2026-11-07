@@ -4,6 +4,7 @@ type Entry={title:string;text:string;meta?:string};
 type Participant={city:string;bio:string[];turnover:string;team:string;companies:Entry[];requests:Entry[];expertise:Entry[]};
 // Fictional demo content for the two people shown on the community home screen.
 export const participants:Record<string,Participant>={
+ 'Алексей Смирнов':{city:'Москва, Россия',turnover:'До 100 млн ₽/год',team:'11–50 сотрудников',bio:['Основатель сервисной студии. Развиваю команду, продажи и клиентский сервис. В сообществе ищу практиков, с которыми можно обсудить задачи роста бизнеса.','Сейчас хочу сформировать самостоятельный отдел продаж: описать процессы, настроить CRM и подобрать первых менеджеров. Открыт к взаимному обмену опытом и рекомендациям.'],companies:[{title:'Сервисная студия',text:'Команда, которая помогает компаниям запускать и сопровождать сервисные проекты.',meta:'Основатель · Москва'}],requests:[{title:'Нужен руководитель продаж',text:'Нужна помощь с запуском отдела продаж, воронкой, CRM и наймом команды.',meta:'Команда · онлайн'}],expertise:[{title:'Запуск сервисных проектов',text:'Поделюсь опытом организации клиентской работы и подготовки небольших команд к самостоятельному ведению проектов.',meta:'Обмен опытом'}]},
  'Андрей Белов':{
   city:'Москва, Россия',turnover:'До 50 млн ₽/год',team:'11–50 сотрудников',
   bio:['Сооснователь студии «Форма». Помогаю предпринимателям наводить порядок в операционной работе: распределять ответственность, выстраивать процессы и развивать команду.',
@@ -40,7 +41,8 @@ export function applyParticipant(root:HTMLElement,route:string,person:Person){
   if(text==='Опора сообщества'){const badge=p.closest<HTMLElement>('[data-name="Уровень поддержки"]');if(badge)badge.style.display='none';}
  }
  const avatar=root.querySelector<HTMLImageElement>('[data-name="Аватар · Опора сообщества"] img');
- if(avatar)avatar.src=person.photo.startsWith('assets/')?import.meta.env.BASE_URL+person.photo:person.photo;
+ if(avatar&&person.photo)avatar.src=person.photo.startsWith('assets/')?import.meta.env.BASE_URL+person.photo:person.photo;
+ else if(avatar){const wrapper=avatar.closest<HTMLElement>('[data-name="Аватар · Опора сообщества"]');if(wrapper){wrapper.replaceChildren();wrapper.textContent=person.name.split(' ').map(s=>s[0]).join('');wrapper.classList.add('profile-avatar-initials');}}
  const video=root.querySelector<HTMLElement>('[data-name="Видео"]');
  if(video){video.style.height='auto';video.style.minHeight='0';video.replaceChildren();const note=document.createElement('p');note.className='local-empty';note.textContent='Участник пока не добавил видео';video.append(note);}
  const tabs=root.querySelector<HTMLElement>('[data-name="Вкладки профиля"]');const content=tabs?.nextElementSibling;
@@ -53,4 +55,10 @@ export function applyParticipant(root:HTMLElement,route:string,person:Person){
   if(entry.meta){const meta=document.createElement('small');meta.textContent=entry.meta;card.append(meta);}
   content.append(card);
  }
+}
+
+export function personForName(name:string):Person{
+ const photos:Record<string,string>={'Андрей Белов':'assets/24ca7d52-0300-48a5-9966-d9f6a5eed0ad.png','Мария Волкова':'assets/03805a59-b953-4680-9b42-877ac303f158.png'};
+ const roles:Record<string,string>={'Андрей Белов':'Сооснователь · «Форма»','Мария Волкова':'Консультант по продажам','Алексей Смирнов':'Основатель · сервисная студия'};
+ return{id:name,name,role:roles[name]||'Участник сообщества',photo:photos[name]||''};
 }

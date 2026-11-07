@@ -14,7 +14,7 @@ const imgTheMissionIconLocalXClose22 = asset("assets/008777cc-dd08-4982-9c80-52b
 const img2 = asset("assets/12310a25-9c46-46c1-8d78-47b736971495.png");
 const img2051 = asset("assets/0a261eb7-fd0b-4ddb-a063-9dd30807301c.png");
 const img = asset("assets/3bbbf648-2b78-4281-b2f5-842a2900e059.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 const imgActiveGlow = asset("assets/405ad1bd-da7c-48fb-80eb-25467ac4606a.svg");
 const imgUserCircle = asset("assets/000757ff-8952-487a-8041-b1ef196f3a7f.svg");
 

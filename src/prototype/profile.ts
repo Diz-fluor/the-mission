@@ -3,6 +3,8 @@ import document from './alexander-profile.json';
 const normalize=(text:string)=>text.replace(/\s+/g,' ').trim();
 
 export function prepareProfile(root:HTMLElement,alexander:boolean,role?:string|string[]){
+ const videos=root.querySelector<HTMLElement>('[data-name="Видео"]');
+ if(videos){videos.style.height='auto';videos.style.minHeight='0';videos.style.width='100%';}
  const about=root.querySelector<HTMLElement>('[data-name="О себе"]');
  if(!about)return;
  const header=window.document.createElement('button');header.type='button';header.className='profile-about-toggle';header.dataset.profileToggle='true';header.setAttribute('aria-expanded','false');header.setAttribute('aria-controls','profile-biography');

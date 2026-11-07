@@ -16,7 +16,7 @@ const img2051 = asset("assets/0a261eb7-fd0b-4ddb-a063-9dd30807301c.png");
 const imgTheMissionAvatarSupport = asset("assets/24ca7d52-0300-48a5-9966-d9f6a5eed0ad.png");
 const imgTheMissionAvatarSupport1 = asset("assets/d52ef1a7-6cc3-4fb9-8126-b6fbb0d1816d.png");
 const img = asset("assets/bc1fc0a8-b4e9-4124-a894-592494c62227.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 const imgActiveGlow = asset("assets/558665b8-4835-4987-a100-15e0c6c5dfbf.svg");
 const imgUserCircle = asset("assets/f8191c7b-7fe4-43e1-8c42-ca5fe2b12418.svg");
 

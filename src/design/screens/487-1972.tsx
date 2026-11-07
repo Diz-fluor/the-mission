@@ -18,10 +18,10 @@ const imgTheMissionIconLocalXClose22 = asset("assets/008777cc-dd08-4982-9c80-52b
 const img2 = asset("assets/12310a25-9c46-46c1-8d78-47b736971495.png");
 const img2051 = asset("assets/0a261eb7-fd0b-4ddb-a063-9dd30807301c.png");
 const img = asset("assets/5f2edee4-5a0f-46b1-aa0b-a414e0059c69.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 const imgActiveGlow = asset("assets/1cbe81d3-2dc6-46e7-b625-fa8710996319.svg");
 const imgUserCircle = asset("assets/3911309b-d777-4300-bf94-fa44988c505a.svg");
-const imgRadio = asset("assets/fd002ea5-6be2-48d5-980e-b64b2dbd1a99.svg");
+const imgRadio = asset("assets/bd1a58e1-9f5f-40f2-8d09-333ec17eee97.svg");
 
 function TheMissionIconLocalArrowRight24({ className }: { className?: string }) {
   return (

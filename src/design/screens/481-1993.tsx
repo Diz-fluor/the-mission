@@ -7,7 +7,7 @@ const imgGroup12 = asset("assets/52f89bc3-e619-4bf7-8aaa-5f064b4d603e.svg");
 const imgVector1 = asset("assets/db5c7874-2a55-41a0-b836-3395c767d9d6.svg");
 const img = asset("assets/3f06dd2b-3849-4cd4-8eb5-413a9e03c3ef.svg");
 const img1 = asset("assets/6e9609d6-70b8-40f1-b9ab-01d01bfa8fbe.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 
 function TheMissionIconLocalArrowRight24({ className }: { className?: string }) {
   return (

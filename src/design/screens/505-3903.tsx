@@ -2,14 +2,14 @@
 const asset = (path: string) => import.meta.env.BASE_URL + path;
 const imgTheMissionIconLocalChevronRight20 = asset("assets/03ac6dd8-a71d-4628-a958-26f15aea48eb.svg");
 const imgTheMissionIconNavigationFile06 = asset("assets/b4406d06-8001-48b8-8043-2213f8f29ac3.svg");
-const imgTheMissionIconNavigationShield01 = asset("assets/26bfecb3-025f-43a7-853e-aa2656e0e075.svg");
+const imgTheMissionIconNavigationShield01 = asset("assets/15b1d493-a769-42ac-b8ab-4b18a867d5d0.svg");
 const imgTheMissionIconNavigationLock01 = asset("assets/292e2544-fb66-4e06-9cae-aabce7336df1.svg");
 const imgTheMissionIconLocalChevronDown20 = asset("assets/00ed3ce4-162d-4c36-b670-7937fb986ad3.svg");
 const imgTheMissionIconArrowLeft = asset("assets/00e9f81a-abd0-4652-bd3e-093181d39546.svg");
 const imgTheMissionIconLocalDotsHorizontal24 = asset("assets/017081f7-c97e-4d62-b0e1-111bc030bb6b.svg");
 const imgTheMissionIconLocalXClose22 = asset("assets/008777cc-dd08-4982-9c80-52b06064798a.svg");
 const img = asset("assets/6adf415e-78c8-4870-8566-18121223094a.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 
 function TheMissionIconLocalChevronRight20({ className }: { className?: string }) {
   return (

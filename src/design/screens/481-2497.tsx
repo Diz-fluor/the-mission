@@ -6,7 +6,7 @@ const imgTheMissionIconLocalArrowLeft18 = asset("assets/009d7f52-f8ca-4207-8b29-
 const imgTheMissionIconLocalDotsHorizontal24 = asset("assets/017081f7-c97e-4d62-b0e1-111bc030bb6b.svg");
 const imgTheMissionIconLocalXClose22 = asset("assets/008777cc-dd08-4982-9c80-52b06064798a.svg");
 const img = asset("assets/15c3cf15-aeea-4f7d-a17e-88b513b0a523.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 const imgEllipse = asset("assets/21baa1a8-3b23-4642-9721-7c8fdd70fde5.svg");
 const imgEllipse1 = asset("assets/09c5d765-a029-4b79-9d4c-6956ba6b366b.svg");
 

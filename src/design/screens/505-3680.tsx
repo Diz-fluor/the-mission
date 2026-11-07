@@ -7,7 +7,7 @@ const imgTheMissionIconLocalHome0522 = asset("assets/01f92474-e603-468c-bc94-58f
 const imgTheMissionIconLocalChevronRight20 = asset("assets/03ac6dd8-a71d-4628-a958-26f15aea48eb.svg");
 const imgTheMissionIconNavigationTrash01 = asset("assets/b71ac3d1-7d4f-41f6-852a-0e8d3a779434.svg");
 const imgTheMissionIconNavigationHelpCircle = asset("assets/09a048f7-a610-4eed-9ffb-da9d175c859f.svg");
-const imgTheMissionIconNavigationShield01 = asset("assets/26bfecb3-025f-43a7-853e-aa2656e0e075.svg");
+const imgTheMissionIconNavigationShield01 = asset("assets/15b1d493-a769-42ac-b8ab-4b18a867d5d0.svg");
 const imgTheMissionIconNavigationLock01 = asset("assets/292e2544-fb66-4e06-9cae-aabce7336df1.svg");
 const imgTheMissionIconNavigationTheMissionIconBell01 = asset("assets/2ec232d1-a780-44ed-933d-9df104d39468.svg");
 const imgTheMissionIconNavigationTheMissionIconBookmark = asset("assets/ffb02909-fafe-4320-ac53-8aa87c336a3a.svg");
@@ -15,7 +15,7 @@ const imgTheMissionIconLocalDotsHorizontal24 = asset("assets/017081f7-c97e-4d62-
 const imgTheMissionIconLocalXClose22 = asset("assets/008777cc-dd08-4982-9c80-52b06064798a.svg");
 const img2 = asset("assets/12310a25-9c46-46c1-8d78-47b736971495.png");
 const img = asset("assets/6e3f881b-7d5c-43de-80a4-b71a752fa9f9.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 const imgActiveGlow = asset("assets/66e1b698-27db-4ee7-95ad-18f33fd6466d.svg");
 const imgUserCircle = asset("assets/db88e337-5347-424c-8f1a-9ce8ee494dd5.svg");
 

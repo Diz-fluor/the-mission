@@ -1,6 +1,15 @@
 export type Person = { id: string; name: string; photo: string; role: string };
 export const localPhoto=(src:string)=>src.includes('/assets/')?'assets/'+src.split('/assets/').pop():src;
 export const photoUrl=(src:string)=>localPhoto(src).startsWith('assets/')?import.meta.env.BASE_URL+localPhoto(src):src;
+export function prepareChoices(root:HTMLElement,route:string,selected?:string){
+ const rows=[...root.querySelectorAll<HTMLElement>('[data-name*="/Radio Row"],[data-name="Список вариантов"]>div')];
+ const multi=['481:2339','481:2421'].includes(route);const initial=selected||(multi?rows.slice(0,2).map(n=>n.querySelector('p')?.textContent?.trim()).join('|'):rows[route==='487:1972'?1:0]?.querySelector('p')?.textContent?.trim());
+ const radioImage=root.querySelector<HTMLImageElement>('[data-name*="/Radio Row"] [data-name="Radio"] img');
+ for(const row of rows){
+  row.dataset.choice=row.querySelector('p')?.textContent?.trim()||'';row.dataset.multiChoice=String(multi);row.setAttribute('role',multi?'checkbox':'radio');row.setAttribute('aria-label',row.dataset.choice);row.setAttribute('aria-checked',String((initial||'').split('|').includes(row.dataset.choice)));row.tabIndex=0;
+  const circle=row.querySelector<HTMLElement>('[data-name="Radio"],[data-name="Ellipse"]');if(circle)circle.classList.add('choice-indicator');if(circle&&radioImage&&!circle.querySelector('img'))circle.append(radioImage.cloneNode(true));
+ }
+}
 export function syncHomeFilters(root:HTMLElement,selected:string){
  const group=root.querySelector<HTMLElement>('[data-name="Направления"]');
  if(!group)return;
@@ -12,7 +21,7 @@ export function syncHomeFilters(root:HTMLElement,selected:string){
 }
 export function syncComposer(root:HTMLElement){
  for(const composer of root.querySelectorAll<HTMLElement>('[data-name*="Composer"]')){
-  const input=composer.querySelector<HTMLTextAreaElement>('[data-field="composer"]');
+  const input=composer.querySelector<HTMLTextAreaElement>('[data-composer]');
   const send=composer.querySelector<HTMLElement>('[data-name="Отправить"]');
   if(send){send.setAttribute('role','button');send.setAttribute('aria-label','Отправить сообщение');send.setAttribute('aria-disabled',String(!input?.value.trim()));send.tabIndex=0;}
  }
@@ -59,7 +68,7 @@ export function appendMessage(root: HTMLElement, text: string) {
 }
 export function showRequestRecords(root: HTMLElement, route: string, requests: {id:string;title:string;description:string;closed?:boolean}[], selected: string|null) {
  const record=requests.find(r=>r.id===selected);
- if (record && ['503:2556','503:2896'].includes(route)) for (const p of root.querySelectorAll('p')) { if (normalizedText(p.textContent).startsWith('Нужен руководитель продаж')) p.textContent=record.title; if (normalizedText(p.textContent).includes('Запустить отдел продаж')) p.textContent=record.description; }
+ if (record && ['503:2556','503:2896'].includes(route)) for (const p of root.querySelectorAll('p')) { if (normalizedText(p.textContent).startsWith('Нужен руководитель продаж')||normalizedText(p.textContent)==='Руководитель продаж') p.textContent=record.title; if (normalizedText(p.textContent).includes('Запустить отдел продаж')||normalizedText(p.textContent).startsWith('Нужны процессы, воронка')) p.textContent=record.description; }
  if(record&&route==='503:2556')for(const p of root.querySelectorAll('p'))if(normalizedText(p.textContent)==='Откликнуться')p.textContent='Изменить запрос';
  if (!['503:2842','503:2497'].includes(route)) return;
  const container=root.querySelector('[data-name^="Содержание"] [data-name="Контент"]')||root.querySelector('[data-name^="Содержание"]');if(!container)return;

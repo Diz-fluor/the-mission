@@ -11,7 +11,7 @@ const imgTheMissionIconLocalHome0522 = asset("assets/01f92474-e603-468c-bc94-58f
 const imgTheMissionIconLocalDotsHorizontal24 = asset("assets/017081f7-c97e-4d62-b0e1-111bc030bb6b.svg");
 const imgTheMissionIconLocalXClose22 = asset("assets/008777cc-dd08-4982-9c80-52b06064798a.svg");
 const img = asset("assets/054259d0-83ad-4543-82bb-6de00c7b41c8.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 const imgActiveGlow = asset("assets/ee4b221b-03a1-4312-a956-b6ee055b0f02.svg");
 const imgUserCircle = asset("assets/202bac3f-be4f-468d-92b4-1f381b6a510b.svg");
 

@@ -28,7 +28,7 @@ try{
  for(let i=0;i<values.length;i++)await inputs.nth(i).fill(values[i]);
  await page.getByText('На согласование',{exact:true}).click();
  assert.equal((await state()).deal.title,'Проверка сделки');
- await open('504:2892');await page.locator('[data-deal="current"]').click();await at('504:3003');
+ await open('504:2892');await page.locator('[data-deal]').click();await at('504:3003');
  assert.deepEqual(errors,[]);
  console.log('Extended: saved profile, tabs, empty search, persisted chat and local deal passed');
 }finally{await browser.close();}

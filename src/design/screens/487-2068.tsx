@@ -3,8 +3,8 @@ const asset = (path: string) => import.meta.env.BASE_URL + path;
 const imgTheMissionIconLocalArrowRight24 = asset("assets/024a5030-1e53-4b90-874e-9ff9d078a886.svg");
 const imgTheMissionIconLocalDotsHorizontal24 = asset("assets/017081f7-c97e-4d62-b0e1-111bc030bb6b.svg");
 const imgTheMissionIconLocalXClose22 = asset("assets/008777cc-dd08-4982-9c80-52b06064798a.svg");
-const img = asset("assets/1a4f1b30-374b-445d-b82c-e2f5f5f33904.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const img = asset("assets/016330a7-70ab-4315-be61-012aef2f6687.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 const imgFrame = asset("assets/05a11eee-1cb0-490f-87d6-41869c3e7a80.svg");
 
 function TheMissionIconLocalArrowRight24({ className }: { className?: string }) {

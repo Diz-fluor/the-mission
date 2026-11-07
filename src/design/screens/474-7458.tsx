@@ -8,7 +8,7 @@ const img1 = asset("assets/d52ef1a7-6cc3-4fb9-8126-b6fbb0d1816d.png");
 const img = asset("assets/376256e2-78dd-4dfd-a729-6b9fe89f6784.svg");
 const imgUnion = asset("assets/889fa674-0d85-4e9d-bc31-1f50a9a69960.svg");
 const imgGroup6 = asset("assets/e7825938-c1af-48f8-af3b-2c79a174812d.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 
 function TheMissionIconLocalMicrophone0128({ className }: { className?: string }) {
   return (

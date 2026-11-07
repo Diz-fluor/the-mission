@@ -10,7 +10,7 @@ const imgTheMissionIconLocalDotsHorizontal24 = asset("assets/017081f7-c97e-4d62-
 const imgTheMissionIconLocalXClose22 = asset("assets/008777cc-dd08-4982-9c80-52b06064798a.svg");
 const img1 = asset("assets/03805a59-b953-4680-9b42-877ac303f158.png");
 const img = asset("assets/7393c50e-c701-4d24-af37-54f9a2b1ba51.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 
 function TheMissionIconLocalArrowRight24({ className }: { className?: string }) {
   return (

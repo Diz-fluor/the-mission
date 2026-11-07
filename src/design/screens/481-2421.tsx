@@ -7,7 +7,7 @@ const imgTheMissionIconLocalArrowLeft18 = asset("assets/009d7f52-f8ca-4207-8b29-
 const imgTheMissionIconLocalDotsHorizontal24 = asset("assets/017081f7-c97e-4d62-b0e1-111bc030bb6b.svg");
 const imgTheMissionIconLocalXClose22 = asset("assets/008777cc-dd08-4982-9c80-52b06064798a.svg");
 const img = asset("assets/1996bc30-9c03-42d2-9ee8-07ae87603284.svg");
-const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const imgWiFi = asset("assets/01bed147-0a79-4144-9745-f84d3ee5b060.svg");
 
 function TheMissionIconLocalArrowRight24({ className }: { className?: string }) {
   return (
