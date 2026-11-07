@@ -71,6 +71,10 @@ function fitToViewport(stage: HTMLElement, frame: boolean) {
     const texts=children.filter(n=>['P','INPUT','TEXTAREA'].includes(n.tagName)&&n.offsetWidth>70);
     for(const child of texts.length?texts:children.filter(n=>n.offsetWidth>80)){child.style.flex='1 1 0';child.style.width='0';child.style.minWidth='0';}
   }
+  for(const dot of root.querySelectorAll<HTMLElement>('[data-name*="Таббар"] [data-name="THE MISSION/Indicator/Unread"]')){
+    const icon=dot.parentElement?.querySelector<HTMLElement>('[data-name*="briefcase"]');
+    if(icon){dot.style.left=`calc(50% + ${icon.offsetWidth/2-dot.offsetWidth/2}px)`;dot.style.top=`${icon.offsetTop-dot.offsetHeight/2}px`;}
+  }
 }
 
 function StateView({ id, go }: { id: string; go: (id: string) => void }) {
