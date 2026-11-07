@@ -2,7 +2,7 @@ import document from './alexander-profile.json';
 
 const normalize=(text:string)=>text.replace(/\s+/g,' ').trim();
 
-export function prepareProfile(root:HTMLElement,alexander:boolean,role?:string){
+export function prepareProfile(root:HTMLElement,alexander:boolean,role?:string|string[]){
  const about=root.querySelector<HTMLElement>('[data-name="О себе"]');
  if(!about)return;
  const header=window.document.createElement('button');header.type='button';header.className='profile-about-toggle';header.dataset.profileToggle='true';header.setAttribute('aria-expanded','false');header.setAttribute('aria-controls','profile-biography');
@@ -14,7 +14,7 @@ export function prepareProfile(root:HTMLElement,alexander:boolean,role?:string){
    const title=window.document.createElement('h3');title.textContent=section.title;body.append(title);
    for(const text of section.paragraphs){const p=window.document.createElement('p');p.textContent=text;body.append(p);}
   }
- }else{const p=window.document.createElement('p');p.textContent=role||'Участник пока не добавил подробную информацию о себе';body.append(p);}
+ }else{for(const text of Array.isArray(role)?role:[role||'Участник пока не добавил подробную информацию о себе']){const p=window.document.createElement('p');p.textContent=text;body.append(p);}}
  const close=window.document.createElement('button');close.type='button';close.dataset.profileToggle='true';close.className='profile-about-close';close.textContent='Свернуть';body.append(close);about.append(body);
  if(!alexander)return;
  // Keep the Figma cards and typography while replacing shortened copy with

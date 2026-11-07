@@ -1,4 +1,5 @@
 import { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentType } from 'react';
+import { applyParticipant, participants } from './participants';
 import { prepareProfile, toggleProfileDetails, toggleMoreExpertise } from './profile';
 import { screens as capturedScreens } from '../design/registry';
 import behaviorData from '../design/behavior.json';
@@ -56,10 +57,12 @@ function fitToViewport(stage: HTMLElement, frame: boolean) {
       else if (/Содержание/.test(name)) { child.style.maxHeight = `calc(100% - ${top + 112}px - var(--safe-top))`; child.style.overflowY = 'auto'; }
     }
   }
+  for(const actions of root.querySelectorAll<HTMLElement>('[data-name="Личные действия · Сохранённые и уведомления"]')){actions.style.left='auto';actions.style.right=root.querySelector('[data-name="Настройки · открыть"]')?'44px':'0';}
   for (const row of root.querySelectorAll<HTMLElement>('[data-name="Действия профиля"]')) for (const b of [...row.children].slice(0, 2) as HTMLElement[]) { b.style.flex = '1 1 0'; b.style.width = '0'; b.style.minWidth = '0'; }
   stage.style.width = '100%'; stage.style.height = '100%';
   for(const n of root.querySelectorAll<HTMLElement>('[data-name="Контент"]'))if(getComputedStyle(n).flexDirection==='column'){n.style.height='auto';n.style.overflow='visible';n.style.flexShrink='0';}
   for(const row of root.querySelectorAll<HTMLElement>('*')){
+    if(row.dataset.name==='Видео · прокрутка')continue;
     const css=getComputedStyle(row);if(css.display!=='flex'||css.flexDirection!=='row')continue;
     const children=[...row.children].filter(n=>getComputedStyle(n).position!=='absolute'&&getComputedStyle(n).display!=='none') as HTMLElement[];
     const available=row.clientWidth-parseFloat(css.paddingLeft)-parseFloat(css.paddingRight);
@@ -174,18 +177,9 @@ export function Prototype() {
       const rel = stateRef.current.relationship[personId()];
       for (const p of el.querySelectorAll('p')) if (['Познакомиться', 'Написать', 'Запрос отправлен'].includes(p.textContent?.trim() || '')) { p.textContent = rel === 'accepted' ? 'Написать' : rel === 'pending' ? 'Запрос отправлен' : 'Познакомиться';if(rel==='pending')p.style.fontSize='12px'; }
       const actions=el.querySelector('[data-name="Действия профиля"]');if(actions&&rel==='accepted'&&![...el.querySelectorAll('p')].some(p=>p.textContent?.startsWith('Вы знакомы'))){const status=document.createElement('p');status.className='local-status';status.textContent='Вы знакомы · открыт Telegram';actions.before(status);}
-      if (stateRef.current.person && stateRef.current.person.id !== 'alexander') {
-        const person = stateRef.current.person;
-        for (const p of el.querySelectorAll('p')) { if (p.textContent?.trim() === 'Александр Репин') p.textContent = person.name; if (p.textContent?.includes('Основатель · ТВОЙ СТИЛЬ')) p.textContent = person.role; }
-        const avatar = [...el.querySelectorAll<HTMLImageElement>('img')].find(img => { const r = img.getBoundingClientRect(); return r.width >= 75 && r.width <= 85; });
-        if (avatar) avatar.src = photoUrl(person.photo);
-        for(const p of el.querySelectorAll('p'))if(p.textContent?.trim()==='Опора сообщества')p.parentElement!.style.display='none';
-        el.querySelectorAll<HTMLElement>('[data-name="Масштаб бизнеса · видимость"],[data-name="Видео"]').forEach(n=>n.style.display='none');
-        const tabs=el.querySelector<HTMLElement>('[data-name="Вкладки профиля"]');const content=tabs?.nextElementSibling;
-        if(content){const card=document.createElement('div');card.className='choice';const text=document.createElement('p');text.textContent=route==='729:5891'?'Участник пока не добавил запросы':route==='729:6028'?'Участник пока не добавил экспертизы':person.role;card.append(text);content.replaceChildren(card);}
-      }
+      if(stateRef.current.person&&stateRef.current.person.id!=='alexander')applyParticipant(el,route,stateRef.current.person);
     }
-    if(!frame&&(ownProfiles.has(route)||foreignProfiles.has(route)))prepareProfile(el,ownProfiles.has(route)||!stateRef.current.person||stateRef.current.person.id==='alexander',stateRef.current.person?.role);
+    if(!frame&&(ownProfiles.has(route)||foreignProfiles.has(route)))prepareProfile(el,ownProfiles.has(route)||!stateRef.current.person||stateRef.current.person.id==='alexander',participants[stateRef.current.person?.name||'']?.bio||stateRef.current.person?.role);
     if(!frame&&stateRef.current.person&&route.startsWith('487:')){const p=stateRef.current.person;const name=p.name;const accusative=name==='Мария Волкова'?'Марию Волкову':name==='Андрей Белов'?'Андрея Белова':name;const instrumental=name==='Мария Волкова'?'Марией Волковой':name==='Андрей Белов'?'Андреем Беловым':name;for(const text of el.querySelectorAll('p'))if(text.textContent?.includes('Александр'))text.textContent=text.textContent.replaceAll('С Александром Репиным','С '+instrumental).replaceAll('Александра Репина',accusative).replaceAll('Александр Репин',name).replaceAll('Александр принял',name.split(' ')[0]+' принял');}
     if(!frame&&route.startsWith('504:')&&stateRef.current.deal){const deal=stateRef.current.deal;for(const p of el.querySelectorAll('p')){const t=normalized(p.textContent||'');if(t==='Запуск отдела продаж')p.textContent=deal.title;if(t.includes('Воронка, регламенты')&&t.includes('обучение'))p.textContent=deal.result;if(t.includes('60 000 ₽'))p.textContent=t.replace('60 000 ₽',deal.cost||'60 000 ₽');}if(route==='504:2892'){const container=el.querySelector('[data-name^="Содержание"] [data-name="Контент"]')||el.querySelector('[data-name^="Содержание"]');if(container){const b=document.createElement('button');b.className='local-request';b.dataset.deal='current';b.textContent=deal.title+' · '+(deal.status||'Согласование');container.append(b);}}}
     if (route === '504:3133' && stateRef.current.messages.length) { const list = document.createElement('div'); list.className = 'prototype-messages'; for (const msg of stateRef.current.messages as { id: string; text: string }[]) { const p = document.createElement('p'); p.textContent = msg.text; list.append(p); } (el.querySelector('[data-name*="Содержание"]') || el.firstElementChild)?.appendChild(list); }
