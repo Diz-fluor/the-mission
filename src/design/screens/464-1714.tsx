@@ -1,0 +1,185 @@
+// Generated from the matching Figma screen; behavior lives in src/prototype.
+const asset = (path: string) => import.meta.env.BASE_URL + path;
+const imgTheMissionIconLocalArrowRight24 = asset("assets/158fc1d2-0c9d-49ed-86cd-1a9af4d92464.svg");
+const imgTheMissionIconLocalArrowLeftTheMission18 = asset("assets/16f8d5c6-139d-4c4c-85c0-c744d7c280df.svg");
+const imgTheMissionIconLocalDotsHorizontal24 = asset("assets/017081f7-c97e-4d62-b0e1-111bc030bb6b.svg");
+const imgTheMissionIconLocalXClose22 = asset("assets/008777cc-dd08-4982-9c80-52b06064798a.svg");
+const img = asset("assets/0b54508c-c564-4b94-8d59-ee05d86fac5f.svg");
+const imgGroup12 = asset("assets/68c3b94b-2739-46b1-bca2-981aae12b93a.svg");
+const imgWiFi = asset("assets/021b2690-2599-4dc1-afd6-35314e49e167.svg");
+const img1 = asset("assets/154107ce-e6ee-4d30-adff-c3b4d29f15c3.svg");
+const img2 = asset("assets/bfe03e1b-e1d2-440c-aec4-2480a89f8652.svg");
+const imgVector1 = asset("assets/3501d692-25a3-459d-9a67-56092a16deae.svg");
+
+function TheMissionIconLocalArrowRight24({ className }: { className?: string }) {
+  return (
+    <div className={className || "dd89972fe17 d8b67f4b35a"} data-node-id="610:5173" data-name="THE MISSION/Icon/Local/arrow-right · 24">
+      <img alt="" className="dda4dbfbc4f d0214b4b355 d7b7df0449b d2191c14562 d48bd39401f" src={imgTheMissionIconLocalArrowRight24} />
+    </div>
+  );
+}
+
+function TheMissionIconLocalArrowLeftTheMission18({ className }: { className?: string }) {
+  return (
+    <div className={className || "dd89972fe17 d341970947d"} data-node-id="610:5168" data-name="THE MISSION/Icon/Local/arrow-left / THE MISSION · 18">
+      <img alt="" className="dda4dbfbc4f d0214b4b355 d7b7df0449b d2191c14562 d48bd39401f" src={imgTheMissionIconLocalArrowLeftTheMission18} />
+    </div>
+  );
+}
+
+function TheMissionIconLocalDotsHorizontal24({ className }: { className?: string }) {
+  return (
+    <div className={className || "dd89972fe17 d8b67f4b35a"} data-node-id="610:4947" data-name="THE MISSION/Icon/Local/dots-horizontal · 24">
+      <img alt="" className="dda4dbfbc4f d0214b4b355 d7b7df0449b d2191c14562 d48bd39401f" src={imgTheMissionIconLocalDotsHorizontal24} />
+    </div>
+  );
+}
+
+function TheMissionIconLocalXClose22({ className }: { className?: string }) {
+  return (
+    <div className={className || "dd89972fe17 dc3a282964b"} data-node-id="610:4942" data-name="THE MISSION/Icon/Local/x-close · 22">
+      <img alt="" className="dda4dbfbc4f d0214b4b355 d7b7df0449b d2191c14562 d48bd39401f" src={imgTheMissionIconLocalXClose22} />
+    </div>
+  );
+}
+
+export default function TheMissionAppV50102() {
+  return (
+    <div className="dbe09e089c2 dd89972fe17 d48bd39401f" data-node-id="464:1714" data-name="THE MISSION / APP V5 / 01.02 · Правила и согласия">
+      <div className="dda4dbfbc4f db974272d25 dc78facc7a0 d2167406b24 dfee8fd5492" data-node-id="587:4942" data-name="Свет · изумруд + мята">
+        <img alt="" className="dda4dbfbc4f d0214b4b355 d7b7df0449b d2191c14562 d48bd39401f" src={img} />
+      </div>
+      <div className="dda4dbfbc4f d60fbb77139 dce3456432e d3960ffc248 d86843cf1e2 dca0ea3b4e0 df0ea915119 d0a2f3af608" data-node-id="624:15715">
+        <div className="da347c178df d81e44303a2 d5a0396ec7e">
+          <div className="d204a600695 dd89972fe17 d4d18660828">
+            <div className="dda4dbfbc4f d9a8304d388">
+              <img alt="" className="d0214b4b355 d2191c14562 d48bd39401f" src={imgGroup12} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="dda4dbfbc4f d48cb7549e2 dc78facc7a0 d08b04966c7 d2167406b24 dfee8fd5492" data-node-id="464:1718" data-name="Статус-бар">
+        <p className="d0f92246acc dda4dbfbc4f da05b19b468 de83a7042bc d32bd4c7660 dcbca8e81ab d9669b98a03 da41b9d872f dfa0af41562 de82ae8be04" data-node-id="I464:1718;114:143">
+          9:41
+        </p>
+        <div className="dda4dbfbc4f d69290d51cf d931d1ebf8b dbc06bf8f31 d9fb09cb3db d3986fde4dd de82350d83b" data-node-id="I464:1718;114:144" data-name="Dynamic Island" />
+        <div className="dda4dbfbc4f d70585965a0 d51225aaa03 d1f19789392 dce154d3f60 d58c5777eb5 d5f072f4d4b" data-node-id="I464:1718;114:145" data-name="Сигнал" />
+        <div className="dda4dbfbc4f d70585965a0 d772f12f4dd d75774e8b86 dce154d3f60 defd78c3eeb d5f072f4d4b" data-node-id="I464:1718;114:146" data-name="Сигнал" />
+        <div className="dda4dbfbc4f d70585965a0 ddd2b505357 d98c661e5af dce154d3f60 d151d8b9572 d5f072f4d4b" data-node-id="I464:1718;114:147" data-name="Сигнал" />
+        <div className="dda4dbfbc4f d70585965a0 d02e75b435f d468c6e29d3 dce154d3f60 d74ec75e22a d5f072f4d4b" data-node-id="I464:1718;114:148" data-name="Сигнал" />
+        <div className="dda4dbfbc4f d566176225e dabcd8d99e2 d74ec75e22a" data-node-id="I464:1718;114:149" data-name="Wi-Fi">
+          <div className="dda4dbfbc4f d1b3f7cbd80 d04b0e4d719 d91e2b621e1 d2167406b24">
+            <img alt="" className="d0214b4b355 d2191c14562 d48bd39401f" src={imgWiFi} />
+          </div>
+        </div>
+        <div className="dda4dbfbc4f dca6bcd4b6f d143a9107f2 dba4c508992 da98a12b795 d296be40d29 dbc109d48e8 d97c3202983 d820fc6b8ed" data-node-id="I464:1718;114:150" data-name="Батарея" />
+        <div className="dda4dbfbc4f d70585965a0 ddd2b505357 d6878d85f28 d04299ba2f7 da0b9ede005 d253451813c" data-node-id="I464:1718;114:151" data-name="Заряд" />
+      </div>
+      <div className="dda4dbfbc4f db3d3f578a8 dc78facc7a0 d08b04966c7 ded404b2e71 dfee8fd5492" data-node-id="464:1719" data-name="Telegram Mini App · шапка">
+        <TheMissionIconLocalXClose22 className="dda4dbfbc4f da4f50d8dd7 dc3a282964b dfa0af41562" />
+        <TheMissionIconLocalDotsHorizontal24 className="dda4dbfbc4f d9ef8e44ecc d8b67f4b35a dfa0af41562" />
+        <p className="defaa070148 d0f92246acc dda4dbfbc4f da05b19b468 de83a7042bc d64d9fa1b35 d4d711e193c d87daa0ac49 ddf754f77bd dca6bf63030 d61b5cf9bbc dd690bb5fdc" data-node-id="464:1724">
+          THE MISSION
+        </p>
+        <p className="defaa070148 d0f92246acc dda4dbfbc4f d92210b6b0d d8ecebc9f80 d64d9fa1b35 d4d711e193c de39f610589 d69cdf25ad1 dca6bf63030 d1b695498b3 dd690bb5fdc" data-node-id="464:1725">
+          мини-приложение
+        </p>
+      </div>
+      <div className="dda4dbfbc4f d70585965a0 d6e718d5684 dfc06b1ec46 dcdbc510d96 d1b4ae5fcbc d36ac6ee9b9" data-node-id="464:1726" data-name="Rectangle" />
+      <div className="dda4dbfbc4f d507c28c0b9 d60fbb77139 d4a55d41e36 d3960ffc248 dcfc837b3e8 d3892a3ae08" data-node-id="464:1732">
+        <div className="dbf1cdb0fd1 d51225aaa03 dd89972fe17 d4c901ed972 d012fbd121f df6bf922ad2" data-node-id="464:1733" />
+        <div className="dbf1cdb0fd1 d51225aaa03 dd89972fe17 d4c901ed972 d012fbd121f df6bf922ad2" data-node-id="464:1734" />
+        <div className="d9cedb81f50 d51225aaa03 dd89972fe17 d4c901ed972 d012fbd121f df6bf922ad2" data-node-id="464:1735" />
+        <div className="d9cedb81f50 d51225aaa03 dd89972fe17 d4c901ed972 d012fbd121f df6bf922ad2" data-node-id="464:1736" />
+        <div className="d9cedb81f50 d51225aaa03 dd89972fe17 d4c901ed972 d012fbd121f df6bf922ad2" data-node-id="464:1737" />
+        <div className="d9cedb81f50 d51225aaa03 dd89972fe17 d4c901ed972 d012fbd121f df6bf922ad2" data-node-id="464:1738" />
+      </div>
+      <div className="d0f92246acc dda4dbfbc4f d92210b6b0d d8ecebc9f80 d07017cde3e dd6b7ed772e de6e37ffed9 d696db75e3f dfa330cbf51 d7ca6bcea86 d0e4b6a9f25 dbd380d9d47 da2edcb1a3a" data-node-id="464:1739">
+        <p className="d9570947830 d5a4fd449fe d5e15045643">{`Правила `}</p>
+        <p className="d9570947830 d0e6ab96cbe d5e15045643">и согласия</p>
+      </div>
+      <div className="dda4dbfbc4f d507c28c0b9 d60fbb77139 d8dddea0773 d90954d61c5 d60541e1e26 d7e96dc113a d08b04966c7 df5c8cc114f d931139de5b dc25208f291" data-node-id="464:1741" data-name="Правила / три принципа сообщества">
+        <div className="d59e460c4dd d8ace63ef11 d08b04966c7 dd89972fe17 da0b31f4d50 d012fbd121f d6da6a3c3f7" data-node-id="464:1742" data-name="Общайтесь по делу">
+          <div className="dda4dbfbc4f d60fbb77139 d13d2bb326e d3960ffc248 d86843cf1e2 decbd1f89b2 d151d8b9572 d14d2b37cf9" data-node-id="464:1746">
+            <div className="d81e44303a2 d3350916b35">
+              <div className="d13d2bb326e dd89972fe17 d14d2b37cf9" data-name="Фирменный символ / стыковка">
+                <img alt="" className="dda4dbfbc4f d0214b4b355 d7b7df0449b d2191c14562 d48bd39401f" src={img1} />
+              </div>
+            </div>
+          </div>
+          <div className="d0f92246acc dda4dbfbc4f d507c28c0b9 d60fbb77139 d8dddea0773 d2f80ed7720 d60541e1e26 da4f50d8dd7 d08b04966c7 df55953471b d03267f627c de82ae8be04" data-node-id="464:1743" data-name="Текст правила">
+            <p className="da05b19b468 de83a7042bc d76aad9ca0a dd89972fe17 d012fbd121f ddf754f77bd de901727572" data-node-id="464:1744">
+              Общайтесь по делу
+            </p>
+            <div className="d92210b6b0d d8ecebc9f80 dd6b7ed772e dd89972fe17 d012fbd121f d4d2392e8ee de3a33eb148" data-node-id="464:1745">
+              <p className="d67cdcccffc d5a4fd449fe">Без спама и навязчивых</p>
+              <p className="d67cdcccffc">предложений</p>
+            </div>
+          </div>
+        </div>
+        <div className="d59e460c4dd d8ace63ef11 d08b04966c7 dd89972fe17 da0b31f4d50 d012fbd121f d6da6a3c3f7" data-node-id="464:1750" data-name="Берегите контакты">
+          <div className="d0f92246acc dda4dbfbc4f d507c28c0b9 d60fbb77139 d8dddea0773 d2f80ed7720 d60541e1e26 da4f50d8dd7 d08b04966c7 df55953471b d03267f627c de82ae8be04" data-node-id="464:1751" data-name="Текст правила">
+            <p className="da05b19b468 de83a7042bc d76aad9ca0a dd89972fe17 d012fbd121f ddf754f77bd de901727572" data-node-id="464:1752">
+              Берегите контакты
+            </p>
+            <div className="d92210b6b0d d8ecebc9f80 dd6b7ed772e dd89972fe17 d012fbd121f d4d2392e8ee de3a33eb148" data-node-id="464:1753">
+              <p className="d67cdcccffc d5a4fd449fe">Делитесь ими с разрешения</p>
+              <p className="d67cdcccffc">владельца</p>
+            </div>
+          </div>
+          <div className="dda4dbfbc4f d60fbb77139 d2dc86e4d84 d3960ffc248 d86843cf1e2 decbd1f89b2 d9659312a0c d4ff4167fd3" data-node-id="464:1754">
+            <div className="d31c8b9f7c5 da347c178df d81e44303a2">
+              <div className="dd0695281c4 dd89972fe17 d61fc072789" data-name="Фирменный символ / окно">
+                <img alt="" className="dda4dbfbc4f d0214b4b355 d7b7df0449b d2191c14562 d48bd39401f" src={img2} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="d59e460c4dd d8ace63ef11 d08b04966c7 dd89972fe17 da0b31f4d50 d012fbd121f d6da6a3c3f7" data-node-id="464:1758" data-name="Будьте честны">
+          <div className="d0f92246acc dda4dbfbc4f d507c28c0b9 d60fbb77139 d8dddea0773 d2f80ed7720 d60541e1e26 da4f50d8dd7 d08b04966c7 ded5de1fd0d d03267f627c de82ae8be04" data-node-id="464:1759" data-name="Текст правила">
+            <p className="da05b19b468 de83a7042bc d76aad9ca0a dd89972fe17 d012fbd121f ddf754f77bd de901727572" data-node-id="464:1760">
+              Будьте честны
+            </p>
+            <p className="d92210b6b0d d8ecebc9f80 d67cdcccffc dd89972fe17 d012fbd121f d4d2392e8ee de3a33eb148" data-node-id="464:1761">
+              Указывайте актуальный опыт
+            </p>
+          </div>
+          <div className="d36b381be4d dda4dbfbc4f df06c5be931 decbd1f89b2 da1f556ece3 d4ff4167fd3" data-node-id="464:1762">
+            <img alt="" className="dda4dbfbc4f d0214b4b355 d7b7df0449b d2191c14562 d48bd39401f" src={imgVector1} />
+          </div>
+        </div>
+      </div>
+      <div className="dda4dbfbc4f d507c28c0b9 d60fbb77139 d8dddea0773 dc9013e5b51 d60541e1e26 d7e96dc113a d08b04966c7 d1cabeb8604 dc25208f291" data-node-id="464:1763" data-name="Правила / обязательные согласия">
+        <div className="d507c28c0b9 d60fbb77139 d90954d61c5 d60541e1e26 d08b04966c7 dd89972fe17 d012fbd121f dc25208f291" data-node-id="464:1764" data-name="Согласие · не выбрано">
+          <div className="d829fb4a58d ddb5aa66c9e dba4c508992 dd89972fe17 dc10ff8c059 d012fbd121f dc3a282964b" data-node-id="464:1765" data-name="Чекбокс · пустой" />
+          <div className="d507c28c0b9 d60fbb77139 d8dddea0773 d60541e1e26 d08b04966c7 dd89972fe17 d012fbd121f d19b1a99afa" data-node-id="464:1766" data-name="Текст согласия">
+            <p className="d0f92246acc d92210b6b0d d8ecebc9f80 dd6b7ed772e dd89972fe17 d012fbd121f db645baa572 d696db75e3f d19b1a99afa" data-node-id="464:1767">
+              <span className="d64d9fa1b35 d4d2392e8ee">{`Принимаю `}</span>
+              <span className="d3e2fb5af6a d130f8ef188 d6d03550cab d64d9fa1b35 dc534770a1a d4d2392e8ee dc82b67c88e">правила сообщества</span>
+            </p>
+          </div>
+        </div>
+        <div className="d507c28c0b9 d60fbb77139 d90954d61c5 d60541e1e26 d08b04966c7 dd89972fe17 d012fbd121f dc25208f291" data-node-id="464:1768" data-name="Согласие · не выбрано">
+          <div className="d829fb4a58d ddb5aa66c9e dba4c508992 dd89972fe17 dc10ff8c059 d012fbd121f dc3a282964b" data-node-id="464:1769" data-name="Чекбокс · пустой" />
+          <div className="d507c28c0b9 d60fbb77139 d8dddea0773 d60541e1e26 d08b04966c7 dd89972fe17 d012fbd121f d19b1a99afa" data-node-id="464:1770" data-name="Текст согласия">
+            <p className="d0f92246acc d92210b6b0d d8ecebc9f80 dd6b7ed772e dd89972fe17 d012fbd121f db645baa572 d696db75e3f d19b1a99afa" data-node-id="464:1771">
+              <span className="d64d9fa1b35 d4d2392e8ee">{`Согласен на `}</span>
+              <span className="d3e2fb5af6a d130f8ef188 d6d03550cab d64d9fa1b35 dc534770a1a d4d2392e8ee dc82b67c88e">обработку данных</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="dda4dbfbc4f ddcd7d172ae de6e37ffed9 d08b04966c7 da0b31f4d50 dff0970c17b da2ea9b5455" data-node-id="464:1772" data-name="Навигация / Назад · прогресс">
+        <TheMissionIconLocalArrowLeftTheMission18 className="dda4dbfbc4f d6ae25d411a d341970947d d10f77e8cff" />
+      </div>
+      <div className="dda4dbfbc4f d507c28c0b9 d60fbb77139 dc05faf844f d3960ffc248 d8ef2268efb de6e37ffed9 d08b04966c7 d8e18405018 da8511565c9 dd9bf9e11c7 d121e756d9f dc25208f291" data-node-id="480:1817" style={{ backgroundImage: "linear-gradient(166.1071263494619deg, rgba(240, 250, 245, 0.017) 0%, rgba(240, 250, 245, 0.003) 71.429%), linear-gradient(90deg, rgba(6, 17, 12, 0.58) 0%, rgba(6, 17, 12, 0.58) 100%)" }} data-name="CTA · ПРОДОЛЖИТЬ">
+        <p className="d0f92246acc da05b19b468 de83a7042bc d76aad9ca0a dd89972fe17 d012fbd121f d9cec57e7e9 ddf754f77bd de82ae8be04" data-node-id="I480:1817;478:1847">
+          Продолжить
+        </p>
+        <div className="d8aeb5dc250 d507c28c0b9 d60fbb77139 d8dddea0773 d3960ffc248 d86843cf1e2 d08b04966c7 dd89972fe17 d4c901ed972 d012fbd121f df4ccd0396a" data-node-id="I480:1817;478:1848" data-name="Стрелка в круге">
+          <TheMissionIconLocalArrowRight24 className="dd89972fe17 d012fbd121f d8b67f4b35a" />
+        </div>
+      </div>
+    </div>
+  );
+}

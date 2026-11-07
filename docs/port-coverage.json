@@ -1,0 +1,67 @@
+{
+  "total": 139,
+  "highFidelity": 127,
+  "sharedTemplates": 12,
+  "pending": [
+    {
+      "id": "509:4282",
+      "name": "09.26 · Действия с участником",
+      "reason": "Figma get_design_context quota reached; shared template is implemented but exact visual verification is pending"
+    },
+    {
+      "id": "506:4012",
+      "name": "10.03 · Проверка поля",
+      "reason": "Figma get_design_context quota reached; shared template is implemented but exact visual verification is pending"
+    },
+    {
+      "id": "506:4051",
+      "name": "10.04 · Выбор · тип запроса",
+      "reason": "Figma get_design_context quota reached; shared template is implemented but exact visual verification is pending"
+    },
+    {
+      "id": "506:4090",
+      "name": "10.05 · Жалоба · причина",
+      "reason": "Figma get_design_context quota reached; shared template is implemented but exact visual verification is pending"
+    },
+    {
+      "id": "506:4193",
+      "name": "10.08 · Приглашение отозвано",
+      "reason": "Figma get_design_context quota reached; shared template is implemented but exact visual verification is pending"
+    },
+    {
+      "id": "506:4262",
+      "name": "10.10 · Новости · материал",
+      "reason": "Figma get_design_context quota reached; shared template is implemented but exact visual verification is pending"
+    },
+    {
+      "id": "506:4293",
+      "name": "10.11 · Поддержка · условия сбора",
+      "reason": "Figma get_design_context quota reached; shared template is implemented but exact visual verification is pending"
+    },
+    {
+      "id": "506:4397",
+      "name": "10.14 · Предложение · нужны правки",
+      "reason": "Figma get_design_context quota reached; shared template is implemented but exact visual verification is pending"
+    },
+    {
+      "id": "506:4430",
+      "name": "10.15 · Знакомство · отказ",
+      "reason": "Figma get_design_context quota reached; shared template is implemented but exact visual verification is pending"
+    },
+    {
+      "id": "506:4462",
+      "name": "10.16 · Удаление · активные сделки",
+      "reason": "Figma get_design_context quota reached; shared template is implemented but exact visual verification is pending"
+    },
+    {
+      "id": "506:4521",
+      "name": "10.18 · ИИ · подбор выполняется",
+      "reason": "Figma get_design_context quota reached; shared template is implemented but exact visual verification is pending"
+    },
+    {
+      "id": "506:4582",
+      "name": "10.20 · Участник недоступен",
+      "reason": "Figma get_design_context quota reached; shared template is implemented but exact visual verification is pending"
+    }
+  ]
+}
