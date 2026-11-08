@@ -1,0 +1,40 @@
+.prototype-shell:not(.framed) .funding-form [data-name="Вклад · вертикальная прокрутка"] {
+  height: auto !important; bottom: calc(104px + env(safe-area-inset-bottom, 0px)) !important;
+}
+.prototype-shell .funding-form [data-name="Содержание · 05.02 · Донат · выбор суммы"] { gap: 20px !important; }
+.prototype-shell .funding-form [data-name="Суммы"] { display: flex; align-items: center; gap: 10px; height: 48px !important; min-height: 48px; overflow: visible; }
+.prototype-shell .funding-form [data-amount-choice] {
+  flex: 1 1 0; min-width: 0; height: 48px; padding: 0 8px;
+  display: flex; flex-direction: row; align-items: center; justify-content: center; border: 1px solid #304138; border-radius: 16px;
+  background: #131a16 !important; transition: background-color 140ms ease, border-color 140ms ease;
+}
+.prototype-shell .funding-form [data-amount-choice] p { flex: none !important; width: auto !important; height: auto !important; margin: 0; font-size: 16px; line-height: 22px; }
+.prototype-shell .funding-form [data-amount-choice][aria-pressed=true] { background: var(--tm-accent-deep, #073c2c) !important; border-color: var(--tm-accent-primary, #10b981); }
+.prototype-shell .funding-form [data-name="Другая сумма"] { padding: 14px 16px; gap: 4px; min-height: 76px; }
+.prototype-shell .funding-form [data-name="Другая сумма"]:focus-within { border-color: var(--tm-accent-primary, #10b981); }
+.prototype-shell .funding-form [data-name="Ваш вклад"] { gap: 8px; padding: 0; }
+.prototype-shell .funding-form [data-node-id="488:2115"] { font-size: 13px; line-height: 18px; color: var(--tm-text-secondary, #a2aaa7); }
+.prototype-shell .funding-form [data-node-id="488:2116"] { width: 100%; }
+.prototype-shell .funding-form [data-node-id="488:2116"] > p:first-child { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--tm-text-primary, #f1f5f3); margin-bottom: 4px; }
+.prototype-shell .funding-form [data-node-id="488:2116"] > p:last-child { font-size: 13px; line-height: 18px; }
+.prototype-shell .funding-form [data-node-id="488:2117"] { font-size: 13px; line-height: 18px; }
+.prototype-shell .funding-details {
+  display: flex; flex-direction: column; flex-shrink: 0; width: 100%;
+  border-radius: 20px; overflow: hidden; background: #131a16;
+}
+.prototype-shell .funding-details > .funding-detail-link {
+  position: relative; inset: auto; display: flex; align-items: center; justify-content: space-between;
+  flex: none; gap: 16px; width: 100%; height: auto; min-height: 56px; padding: 16px;
+  margin: 0; border: 0; border-radius: 0; color: var(--tm-text-primary, #f1f5f3);
+  text-align: left; background: transparent; transition: background-color 140ms ease;
+}
+.prototype-shell .funding-details > .funding-detail-link + .funding-detail-link { border-top: 1px solid #29372f; }
+.prototype-shell .funding-detail-link > p { flex: 1 1 0; min-width: 0; width: auto; height: auto; font: 400 15px/21px Onest, sans-serif; color: inherit; white-space: normal; }
+.prototype-shell .funding-detail-chevron { position: static; display: block; flex: 0 0 20px; width: 20px; height: 20px; filter: none; }
+.prototype-shell .funding-detail-link:active { background: #202c24; }
+.prototype-shell .funding-form [data-amount-choice]:focus-visible,
+.prototype-shell .funding-detail-link:focus-visible { outline: 2px solid var(--tm-accent-primary, #10b981); outline-offset: -2px; }
+@media (prefers-reduced-motion: reduce) {
+  .prototype-shell .funding-form [data-amount-choice],
+  .prototype-shell .funding-details > .funding-detail-link { transition: none; }
+}

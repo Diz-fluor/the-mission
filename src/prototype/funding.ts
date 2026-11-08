@@ -1,6 +1,21 @@
+import './funding.css';
+
 type Payment={id:string;amount:number;createdAt:string};
 const money=(amount:number)=>new Intl.NumberFormat('ru-RU').format(amount)+' ₽';
 export function prepareFunding(root:HTMLElement,route:string,state:{contribution:number;payment:{amount:number;status:string}|null;payments:Payment[];profile:Record<string,string>|null}){
+ if(route==='488:2076'){
+  root.querySelector('[data-node-id="488:2076"]')?.classList.add('funding-form');
+  const first=root.querySelector<HTMLAnchorElement>('[data-node-id="488:2118"]');
+  const second=root.querySelector<HTMLAnchorElement>('[data-node-id="636:5626"]');
+  if(first&&second&&!first.closest('.funding-details')){
+   const details=document.createElement('nav');details.className='funding-details';details.setAttribute('aria-label','Информация о сборе');first.before(details);
+   for(const link of [first,second]){
+    link.classList.add('funding-detail-link');
+    const label=link.querySelector('p');if(label)label.textContent=label.textContent?.replace(/\s*→\s*$/,'')||'';
+    const icon=document.createElement('img');icon.className='funding-detail-chevron';icon.src=import.meta.env.BASE_URL+'assets/03ac6dd8-a71d-4628-a958-26f15aea48eb.svg';icon.width=20;icon.height=20;icon.alt='';icon.setAttribute('aria-hidden','true');link.append(icon);details.append(link);
+   }
+  }
+ }
  for(const row of root.querySelectorAll<HTMLElement>('[data-name="Отчёт и мой вклад"]')){
   row.classList.add('funding-links');
   for(const link of row.querySelectorAll<HTMLAnchorElement>(':scope > a')){
