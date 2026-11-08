@@ -1,4 +1,4 @@
-// Approved Figma material 788:7321. The outline adapts without stretching the 64px circle.
+// Approved Figma material 786:14235. The outline adapts without stretching the 64px circle.
 const observers = new WeakMap<HTMLElement, ResizeObserver>();
 let serial = 0;
 
@@ -23,11 +23,11 @@ export function prepareGlassSurfaces(root: HTMLElement) {
         <defs>
           <path id="${id}-shape" data-glass-outline=""/>
           <clipPath id="${id}-clip"><use href="#${id}-shape"/></clipPath>
-          <radialGradient id="${id}-warm" cx="0" cy="0" r="1" gradientTransform="translate(.04 1) scale(.32 1.05)"><stop stop-color="#e4d7a7" stop-opacity=".58"/><stop offset="1" stop-color="#e4d7a7" stop-opacity="0"/></radialGradient>
-          <radialGradient id="${id}-cyan" cx="0" cy="0" r="1" gradientTransform="translate(.77 1.08) scale(.39 1.1)"><stop stop-color="#8debdc" stop-opacity=".8"/><stop offset="1" stop-color="#8debdc" stop-opacity="0"/></radialGradient>
-          <radialGradient id="${id}-mint" cx="0" cy="0" r="1" gradientTransform="translate(.39 .04) scale(.4 .95)"><stop stop-color="#a8f2d1" stop-opacity=".94"/><stop offset="1" stop-color="#a8f2d1" stop-opacity="0"/></radialGradient>
+          <radialGradient id="${id}-warm" cx="0" cy="0" r="1" gradientTransform="translate(.04 1) scale(.32 1.05)"><stop stop-color="#7af08c" stop-opacity=".61"/><stop offset="1" stop-color="#ffef77" stop-opacity="0"/></radialGradient>
+          <radialGradient id="${id}-cyan" cx="0" cy="0" r="1" gradientTransform="translate(.77 1.08) scale(.39 1.1)"><stop stop-color="#8debdc" stop-opacity="0"/><stop offset="1" stop-color="#8debdc" stop-opacity="0"/></radialGradient>
+          <radialGradient id="${id}-mint" cx="0" cy="0" r="1" gradientTransform="translate(.39 .04) scale(.4 .95)"><stop stop-color="#a8f2d1" stop-opacity=".77"/><stop offset="1" stop-color="#a8f2d1" stop-opacity="0"/></radialGradient>
           <linearGradient id="${id}-sheen" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f1f5f3" stop-opacity=".18"/><stop offset=".3" stop-color="#a8f2d1" stop-opacity="0"/><stop offset=".65" stop-color="#a8f2d1" stop-opacity="0"/><stop offset="1" stop-color="#f1f5f3" stop-opacity=".18"/></linearGradient>
-          <linearGradient id="${id}-edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f1f5f3" stop-opacity=".52"/><stop offset=".45" stop-color="#a8f2d1" stop-opacity="0"/><stop offset=".55" stop-color="#a8f2d1" stop-opacity="0"/><stop offset="1" stop-color="#f1f5f3" stop-opacity=".52"/></linearGradient>
+          <linearGradient id="${id}-edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f1f5f3" stop-opacity=".57"/><stop offset=".45" stop-color="#a8f2d1" stop-opacity="0"/><stop offset=".55" stop-color="#a8f2d1" stop-opacity="0"/><stop offset="1" stop-color="#f1f5f3" stop-opacity=".57"/></linearGradient>
           <filter id="${id}-inner" x="-10%" y="-50%" width="120%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"/><feOffset in="blur" dy="2" result="offset"/><feComposite in="SourceAlpha" in2="offset" operator="out" result="shadow"/><feFlood flood-color="#001f12" flood-opacity=".12"/><feComposite in2="shadow" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter>
         </defs>
         <g filter="url(#${id}-inner)">
