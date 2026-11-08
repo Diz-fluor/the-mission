@@ -1,0 +1,30 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1137.33" height="592.294" viewBox="0 0 1137.33 592.294" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 12">
+<g id="Ellipse 2" filter="url(#filter0_f_0_46)">
+<ellipse cx="157.74" cy="111.921" rx="157.74" ry="111.921" transform="matrix(-0.866715 -0.498804 0.976177 -0.216977 751.693 520.422)" fill="#7AF08C"/>
+</g>
+<g id="Ellipse 4" filter="url(#filter1_f_0_46)">
+<ellipse cx="197.127" cy="143.152" rx="197.127" ry="143.152" transform="matrix(-0.866715 -0.498804 0.976177 -0.216977 489.925 325.005)" fill="#02271B" fill-opacity="0.5"/>
+</g>
+<g id="Ellipse 3" filter="url(#filter2_f_0_46)">
+<path d="M467.574 252.592C522.081 240.476 621.718 262.568 690.121 301.935C758.524 341.301 769.79 383.035 715.283 395.151C660.777 407.266 561.139 385.174 492.736 345.808C424.333 306.441 413.068 264.707 467.574 252.592Z" fill="#10B981" fill-opacity="0.7"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_0_46" x="420.027" y="205.9" width="608.41" height="423.112" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="64.5952" result="effect1_foregroundBlur_0_46"/>
+</filter>
+<filter id="filter1_f_0_46" x="108.894" y="-36.7184" width="699.84" height="464.67" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="64.5952" result="effect1_foregroundBlur_0_46"/>
+</filter>
+<filter id="filter2_f_0_46" x="366.393" y="182.61" width="450.072" height="282.523" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="33.3315" result="effect1_foregroundBlur_0_46"/>
+</filter>
+</defs>
+</svg>
