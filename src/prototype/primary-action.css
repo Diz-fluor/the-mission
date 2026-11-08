@@ -107,6 +107,14 @@
   filter: drop-shadow(0 2px 4px rgb(15 186 130 / 10%));
 }
 .connection-cta[aria-disabled=true] > .connection-glass { display: none; }
+.prototype-shell .funding-links { display: flex; align-items: center; justify-content: space-between; height: 20px; gap: 12px; }
+.prototype-shell .funding-links > .funding-link {
+  display: flex; align-items: center; justify-content: flex-start; gap: 4px;
+  flex: 0 1 auto; width: auto; min-height: 44px; height: 44px;
+  color: var(--tm-text-secondary, #a2aaa7); white-space: nowrap;
+}
+.prototype-shell .funding-link > p { width: auto; margin: 0; }
+.prototype-shell .funding-chevron { position: static; width: 20px; height: 20px; flex: 0 0 20px; }
 /* Figma 777:6950 — AI entry stays secondary: 48px, Onest 15/21, original case. */
 .prototype-shell .ai-connection {
   --connection-surface: var(--tm-accent-deep, #073c2c);

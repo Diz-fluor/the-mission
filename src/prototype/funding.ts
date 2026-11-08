@@ -1,6 +1,14 @@
 type Payment={id:string;amount:number;createdAt:string};
 const money=(amount:number)=>new Intl.NumberFormat('ru-RU').format(amount)+' ₽';
 export function prepareFunding(root:HTMLElement,route:string,state:{contribution:number;payment:{amount:number;status:string}|null;payments:Payment[];profile:Record<string,string>|null}){
+ for(const row of root.querySelectorAll<HTMLElement>('[data-name="Отчёт и мой вклад"]')){
+  row.classList.add('funding-links');
+  for(const link of row.querySelectorAll<HTMLAnchorElement>(':scope > a')){
+   link.classList.add('funding-link');
+   const label=link.querySelector('p');if(label)label.textContent=label.textContent?.replace(/\s*›\s*$/,'')||'';
+   if(!link.querySelector('.funding-chevron')){const icon=document.createElement('img');icon.className='funding-chevron';icon.src=import.meta.env.BASE_URL+'assets/03ac6dd8-a71d-4628-a958-26f15aea48eb.svg';icon.width=20;icon.height=20;icon.alt='';icon.setAttribute('aria-hidden','true');link.append(icon);}
+  }
+ }
  if(route==='488:2119'&&state.payment?.status==='confirmed')for(const p of root.querySelectorAll('p'))if(p.textContent?.trim()==='500 ₽')p.textContent=money(state.payment.amount);
  if(route==='488:2153'){
   const base=state.profile?.fresh==='true'?0:5000;
