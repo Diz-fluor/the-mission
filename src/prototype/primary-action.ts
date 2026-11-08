@@ -47,3 +47,32 @@ export function preparePrimaryActions(root: HTMLElement) {
     if (isLoading) button.setAttribute('aria-busy', 'true');
   }
 }
+
+/** Secondary AI entry uses the same connected shape and retains its own hierarchy. */
+export function prepareAIEntryActions(root: HTMLElement) {
+  for (const button of root.querySelectorAll<HTMLElement>('[data-name="Вход · ИИ-подбор"]')) {
+    if (button.classList.contains('ai-connection')) continue;
+    const label = button.querySelector<HTMLElement>(':scope > p');
+    const mark = button.querySelector<HTMLElement>(':scope > [data-name*="маркер"]');
+    const arrow = button.querySelector<HTMLElement>(':scope > [data-name*="arrow-right"]');
+    if (!label || !mark || !arrow) continue;
+    const decoration = [...button.children].filter(n => n !== label && n !== mark && n !== arrow);
+    const body = document.createElement('div');
+    body.className = 'ai-connection-label';
+    mark.classList.add('ai-connection-mark');
+    arrow.classList.add('ai-connection-arrow');
+    body.append(mark, label, ...decoration);
+    for (const node of decoration) for (const image of node.querySelectorAll<HTMLImageElement>('img')) {
+      image.src = import.meta.env.BASE_URL + 'assets/ai-entry-glow.svg';
+    }
+    const action = document.createElement('div');
+    action.className = 'connection-action';
+    action.setAttribute('aria-hidden', 'true');
+    action.append(arrow);
+    button.replaceChildren(body, action);
+    button.classList.add('ai-connection');
+    button.setAttribute('role', 'button');
+    button.tabIndex = 0;
+    if (getComputedStyle(button).position === 'static') button.style.position = 'relative';
+  }
+}

@@ -985,6 +985,11 @@
     "sha256": "7b684adab73914509b247ddcb759adb28a6d63fe71ae61e2b1884741140a016c"
   },
   {
+    "file": "assets/ai-entry-glow.svg",
+    "bytes": 659,
+    "sha256": "0410ee0afe098d8a0ad0d27905c94db2941415c2ff3b140a5893566a44a63d1f"
+  },
+  {
     "file": "assets/b06a683a-e178-40bd-b307-0d9371dc3d67.svg",
     "bytes": 1809,
     "sha256": "902ecf2fce0caf92baf80ca0916eaf4fef91ab5e507c9432c500166bf2dcf266"

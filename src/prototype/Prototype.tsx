@@ -1,6 +1,6 @@
 import { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentType } from 'react';
 import { prepareFunding } from './funding';
-import { preparePrimaryActions } from './primary-action';
+import { preparePrimaryActions, prepareAIEntryActions } from './primary-action';
 import { preparePickers } from './pickers';
 import { prepareSettings, accessFor, blockedNames } from './settings';
 import { prepareRequestCards, showSelectedRequest, demoRequests } from './requests';
@@ -251,6 +251,7 @@ export function Prototype() {
       el.animate([{opacity:direction==='section'?0.35:0.6,transform:direction==='section'?'translateY(6px)':`translateX(${direction==='back'?-20:20}px)`},{opacity:1,transform:direction==='section'?'translateY(0)':'translateX(0)'}],{duration:direction==='section'?200:260,easing:'cubic-bezier(0.22, 1, 0.36, 1)'});
     }
     preparePrimaryActions(el);
+    prepareAIEntryActions(el);
     motion.current='none';
     setLoaded(true);
   }, [route, frame, dispatch]);

@@ -1,13 +1,19 @@
 /* Figma 478:1851 — approved «Связь», 64px, IBM Plex Mono 17/24. */
-.prototype-shell .connection-cta {
+.prototype-shell .connection-cta,
+.prototype-shell .ai-connection {
   --connection-surface: var(--tm-accent-primary, #10b981);
   --connection-ink: var(--tm-text-on-accent, #06271c);
+  --connection-size: 64px;
+  --connection-radius: 32px;
+  --connection-bridge-width: 40px;
+  --connection-bridge-height: 24px;
+  --connection-bridge-right: 40px;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
   gap: 4px !important;
-  height: 64px !important;
-  min-height: 64px !important;
+  height: var(--connection-size) !important;
+  min-height: var(--connection-size) !important;
   padding: 0 !important;
   background: transparent !important;
   border: 0 !important;
@@ -16,20 +22,22 @@
   isolation: isolate;
   cursor: pointer;
 }
-.connection-cta::before {
+.connection-cta::before,
+.ai-connection::before {
   content: '';
   position: absolute;
   z-index: -1;
-  right: 40px;
+  right: var(--connection-bridge-right);
   top: 50%;
-  width: 40px;
-  height: 24px;
+  width: var(--connection-bridge-width);
+  height: var(--connection-bridge-height);
   transform: translateY(-50%);
   background: var(--connection-surface);
   transition: background-color 140ms ease;
   pointer-events: none;
 }
-.prototype-shell .connection-cta > .connection-label {
+.prototype-shell .connection-cta > .connection-label,
+.prototype-shell .ai-connection > .ai-connection-label {
   position: relative !important;
   inset: auto !important;
   display: flex !important;
@@ -37,10 +45,10 @@
   flex: 1 1 0 !important;
   min-width: 0;
   width: 0 !important;
-  height: 64px !important;
+  height: var(--connection-size) !important;
   padding: 0 4px 0 16px !important;
   margin: 0 !important;
-  border-radius: 32px;
+  border-radius: var(--connection-radius);
   background: var(--connection-surface) !important;
   color: var(--connection-ink) !important;
   font: 600 17px/24px 'IBM Plex Mono', monospace !important;
@@ -51,18 +59,19 @@
   overflow-wrap: anywhere;
   transition: background-color 140ms ease;
 }
-.prototype-shell .connection-cta > .connection-action {
+.prototype-shell .connection-cta > .connection-action,
+.prototype-shell .ai-connection > .connection-action {
   position: relative !important;
   inset: auto !important;
   transform: none !important;
   display: grid !important;
   place-items: center;
-  flex: 0 0 64px !important;
-  width: 64px !important;
-  height: 64px !important;
+  flex: 0 0 var(--connection-size) !important;
+  width: var(--connection-size) !important;
+  height: var(--connection-size) !important;
   padding: 0 !important;
   margin: 0 !important;
-  border-radius: 32px !important;
+  border-radius: var(--connection-radius) !important;
   background: var(--connection-surface) !important;
   overflow: hidden;
   transition: background-color 140ms ease;
@@ -82,9 +91,32 @@
 .connection-cta[aria-busy=true]:not([aria-disabled=true]) .connection-icon--default { display: none; }
 .connection-cta[aria-busy=true]:not([aria-disabled=true]) .connection-icon--loading { display: block; animation: connection-spin 1s linear infinite; }
 @keyframes connection-spin { to { transform: rotate(360deg); } }
+/* Figma 777:6950 — AI entry stays secondary: 48px, Onest 15/21, original case. */
+.prototype-shell .ai-connection {
+  --connection-surface: var(--tm-accent-deep, #073c2c);
+  --connection-ink: var(--tm-accent-foreground, #20c38e);
+  --connection-size: 48px;
+  --connection-radius: 24px;
+  --connection-bridge-width: 30px;
+  --connection-bridge-height: 18px;
+  --connection-bridge-right: 30px;
+}
+.prototype-shell .ai-connection > .ai-connection-label { gap: 8px; padding-right: 8px !important; text-transform: none; }
+.ai-connection .ai-connection-mark { flex: 0 0 32px; width: 32px !important; height: 32px !important; }
+.prototype-shell .ai-connection-label > p {
+  flex: 1 1 0; min-width: 0; width: 0; height: auto !important;
+  font: 600 15px/21px Onest, sans-serif !important;
+  color: var(--connection-ink) !important;
+  text-transform: none !important;
+}
+.ai-connection .ai-connection-arrow { position: relative !important; inset: auto !important; width: 20px !important; height: 20px !important; flex: 0 0 20px; }
+.prototype-shell .ai-connection:active { --connection-surface: var(--tm-surface-card, #202524); }
 @media (prefers-reduced-motion: reduce) {
   .prototype-shell .connection-cta::before,
   .prototype-shell .connection-cta > .connection-label,
-  .prototype-shell .connection-cta > .connection-action { transition: none; }
+  .prototype-shell .connection-cta > .connection-action,
+  .prototype-shell .ai-connection::before,
+  .prototype-shell .ai-connection > .ai-connection-label,
+  .prototype-shell .ai-connection > .connection-action { transition: none; }
   .connection-cta .connection-icon--loading { animation: none; }
 }
