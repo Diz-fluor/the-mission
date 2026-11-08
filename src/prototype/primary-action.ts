@@ -1,4 +1,6 @@
 import './primary-action.css';
+import { prepareGlassSurfaces } from './glass-surface';
+export { disposeGlassSurfaces } from './glass-surface';
 
 const primarySelector = '[data-name*="CTA"], [data-name="Сохранить изменения профиля"], .native-primary';
 const designDisabled = new Set(['506:4046']);
@@ -46,6 +48,7 @@ export function preparePrimaryActions(root: HTMLElement) {
     if (designDisabled.has(button.dataset.nodeId || '')) button.setAttribute('aria-disabled', 'true');
     if (isLoading) button.setAttribute('aria-busy', 'true');
   }
+  prepareGlassSurfaces(root);
 }
 
 /** Secondary AI entry uses the same connected shape and retains its own hierarchy. */

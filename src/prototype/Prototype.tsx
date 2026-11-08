@@ -1,6 +1,6 @@
 import { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ComponentType } from 'react';
 import { prepareFunding } from './funding';
-import { preparePrimaryActions, prepareAIEntryActions } from './primary-action';
+import { preparePrimaryActions, prepareAIEntryActions, disposeGlassSurfaces } from './primary-action';
 import { preparePickers } from './pickers';
 import { prepareSettings, accessFor, blockedNames } from './settings';
 import { prepareRequestCards, showSelectedRequest, demoRequests } from './requests';
@@ -260,7 +260,7 @@ export function Prototype() {
     const observer = new MutationObserver(() => { if (el.querySelector('[data-node-id],.state-screen') && !el.dataset.prepared) { el.dataset.prepared = 'true'; initializeView(); } });
     observer.observe(el, { childList: true, subtree: true });
     if (el.querySelector('[data-node-id],.state-screen')) { el.dataset.prepared = 'true'; initializeView(); }
-    return () => { observer.disconnect(); delete el.dataset.prepared; };
+    return () => { observer.disconnect(); disposeGlassSurfaces(el); delete el.dataset.prepared; };
   }, [route, initializeView]);
 
   const activate = useCallback((target: HTMLElement) => {

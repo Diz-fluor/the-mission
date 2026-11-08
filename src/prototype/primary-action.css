@@ -91,6 +91,22 @@
 .connection-cta[aria-busy=true]:not([aria-disabled=true]) .connection-icon--default { display: none; }
 .connection-cta[aria-busy=true]:not([aria-disabled=true]) .connection-icon--loading { display: block; animation: connection-spin 1s linear infinite; }
 @keyframes connection-spin { to { transform: rotate(360deg); } }
+/* One continuous material follows the whole silhouette, including the neck. */
+.prototype-shell .connection-cta { gap: 0 !important; }
+.prototype-shell .connection-glass {
+  position: absolute; inset: 0; z-index: -1; display: block;
+  pointer-events: none; filter: drop-shadow(0 4px 6px rgb(15 186 130 / 13%));
+  transition: filter 140ms ease;
+}
+.connection-glass > svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.prototype-shell .connection-cta:not([aria-disabled=true])::before { background: transparent; }
+.prototype-shell .connection-cta:not([aria-disabled=true]) > .connection-label,
+.prototype-shell .connection-cta:not([aria-disabled=true]) > .connection-action { background: transparent !important; }
+.prototype-shell .connection-cta:not([aria-disabled=true]):not([aria-busy=true]):active .connection-glass {
+  --glass-base: #a8f2d1;
+  filter: drop-shadow(0 2px 4px rgb(15 186 130 / 10%));
+}
+.connection-cta[aria-disabled=true] > .connection-glass { display: none; }
 /* Figma 777:6950 — AI entry stays secondary: 48px, Onest 15/21, original case. */
 .prototype-shell .ai-connection {
   --connection-surface: var(--tm-accent-deep, #073c2c);
@@ -119,4 +135,5 @@
   .prototype-shell .ai-connection > .ai-connection-label,
   .prototype-shell .ai-connection > .connection-action { transition: none; }
   .connection-cta .connection-icon--loading { animation: none; }
+  .prototype-shell .connection-glass { transition: none; }
 }
