@@ -1100,6 +1100,26 @@
     "sha256": "18093a07400116766093caa692e8104b88bfefe9266b9847ce7f716224f29c51"
   },
   {
+    "file": "assets/connection-arrow-disabled.svg",
+    "bytes": 381,
+    "sha256": "9f9af1a610dcacde52ae8a0e10bb0e14345d350f47face66ac3e341687212fcf"
+  },
+  {
+    "file": "assets/connection-arrow-pressed.svg",
+    "bytes": 381,
+    "sha256": "d968f266925792109dd76eef21222259e706420b8a5249c21e33ec2ffcc5ba2b"
+  },
+  {
+    "file": "assets/connection-arrow.svg",
+    "bytes": 381,
+    "sha256": "d968f266925792109dd76eef21222259e706420b8a5249c21e33ec2ffcc5ba2b"
+  },
+  {
+    "file": "assets/connection-loading.svg",
+    "bytes": 582,
+    "sha256": "0ae77567c7aed41f2408358c00dcbd19f93ec6dc50dd60324042b24768f1fff4"
+  },
+  {
     "file": "assets/d1adc313-3f44-42f2-9a1e-dcaf33ee978d.svg",
     "bytes": 1797,
     "sha256": "22aee5a9d88db088fa2515174f5d64dabc203b0b2568233777e6e9fbc0d5f044"

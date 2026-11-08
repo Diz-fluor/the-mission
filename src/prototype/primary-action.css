@@ -1,0 +1,90 @@
+/* Figma 478:1851 — approved «Связь», 64px, IBM Plex Mono 17/24. */
+.prototype-shell .connection-cta {
+  --connection-surface: var(--tm-accent-primary, #10b981);
+  --connection-ink: var(--tm-text-on-accent, #06271c);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 4px !important;
+  height: 64px !important;
+  min-height: 64px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  isolation: isolate;
+  cursor: pointer;
+}
+.connection-cta::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  right: 40px;
+  top: 50%;
+  width: 40px;
+  height: 24px;
+  transform: translateY(-50%);
+  background: var(--connection-surface);
+  transition: background-color 140ms ease;
+  pointer-events: none;
+}
+.prototype-shell .connection-cta > .connection-label {
+  position: relative !important;
+  inset: auto !important;
+  display: flex !important;
+  align-items: center;
+  flex: 1 1 0 !important;
+  min-width: 0;
+  width: 0 !important;
+  height: 64px !important;
+  padding: 0 4px 0 16px !important;
+  margin: 0 !important;
+  border-radius: 32px;
+  background: var(--connection-surface) !important;
+  color: var(--connection-ink) !important;
+  font: 600 17px/24px 'IBM Plex Mono', monospace !important;
+  letter-spacing: 0 !important;
+  text-transform: uppercase;
+  text-align: left;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+  transition: background-color 140ms ease;
+}
+.prototype-shell .connection-cta > .connection-action {
+  position: relative !important;
+  inset: auto !important;
+  transform: none !important;
+  display: grid !important;
+  place-items: center;
+  flex: 0 0 64px !important;
+  width: 64px !important;
+  height: 64px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 32px !important;
+  background: var(--connection-surface) !important;
+  overflow: hidden;
+  transition: background-color 140ms ease;
+}
+.connection-cta .connection-icon-slot { position: relative; display: block; width: 24px; height: 24px; background: none; }
+.connection-cta .connection-icon { position: absolute; inset: 0; width: 24px; height: 24px; filter: none !important; opacity: 1 !important; }
+.connection-cta .connection-icon--pressed,
+.connection-cta .connection-icon--disabled,
+.connection-cta .connection-icon--loading { display: none; }
+.connection-cta:not([aria-disabled=true]):not([aria-busy=true]):active { --connection-surface: var(--tm-accent-light, #a8f2d1); }
+.connection-cta:not([aria-disabled=true]):not([aria-busy=true]):active .connection-icon--default { display: none; }
+.connection-cta:not([aria-disabled=true]):not([aria-busy=true]):active .connection-icon--pressed { display: block; }
+.connection-cta[aria-disabled=true] { --connection-surface: var(--tm-disabled-surface, #293c33); --connection-ink: var(--tm-text-disabled, #879b8e); cursor: default; }
+.connection-cta[aria-disabled=true] .connection-icon--default { display: none; }
+.connection-cta[aria-disabled=true] .connection-icon--disabled { display: block; }
+.connection-cta[aria-busy=true]:not([aria-disabled=true]) { cursor: progress; }
+.connection-cta[aria-busy=true]:not([aria-disabled=true]) .connection-icon--default { display: none; }
+.connection-cta[aria-busy=true]:not([aria-disabled=true]) .connection-icon--loading { display: block; animation: connection-spin 1s linear infinite; }
+@keyframes connection-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .prototype-shell .connection-cta::before,
+  .prototype-shell .connection-cta > .connection-label,
+  .prototype-shell .connection-cta > .connection-action { transition: none; }
+  .connection-cta .connection-icon--loading { animation: none; }
+}
