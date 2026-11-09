@@ -23,6 +23,14 @@ export function transition(state, action) {
     case 'message': return action.text.trim() ? { ...state, messages: [...state.messages, { id: action.id, text: action.text.trim(),dealId:action.dealId||'demo-sales' }] } : state;
     case 'publish': return { ...state, requests: [...state.requests, { id: action.id, title: action.title.trim(), description: action.description.trim() }] };
     case 'selectRequest': return { ...state, selectedRequest: action.id };
+    case 'saveAiRequest': {
+      const record = action.record;
+      if (!record?.id || !record.title?.trim() || !record.description?.trim() || !['draft', 'published'].includes(record.status)) return state;
+      const previous = state.requests.find(r => r.id === record.id);
+      return { ...state, selectedRequest: record.id, requests: previous
+        ? state.requests.map(r => r.id === record.id ? { ...r, ...record } : r)
+        : [...state.requests, { ...record }] };
+    }
     case 'editRequest': return { ...state, requests: state.requests.map(r => r.id === state.selectedRequest ? { ...r, title: action.title.trim(), description: action.description.trim() } : r) };
     case 'closeRequest': return { ...state, requests: state.requests.map(r => r.id === state.selectedRequest ? { ...r, closed: true } : r) };
     case 'profile': return {...state,profile:action.replace?{...action.value}:{...state.profile,...action.value}};

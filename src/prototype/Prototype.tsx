@@ -4,6 +4,8 @@ import { preparePrimaryActions, prepareAIEntryActions, disposeGlassSurfaces } fr
 import { preparePickers } from './pickers';
 import { prepareSettings, accessFor, blockedNames } from './settings';
 import { prepareRequestCards, showSelectedRequest, demoRequests } from './requests';
+import { AiRequestFlow, appendAiRequestEntries, type AiRequestRecord, type AiSession } from './ai-request';
+import { AI_REQUEST_ROUTES, AI_SESSION_KEY, restoreAiSession, isAiRequestRoute } from './ai-request-model.mjs';
 import { prepareOnboarding } from './onboarding';
 import { prepareProfileEditor, readProfileEditor, applyOwnProfile, handleProfileEditor, defaultProfile, type OwnProfile } from './own-profile';
 import { syncDeals, prepareRequestTabs, prepareDealList, demoDeals } from './deals';
@@ -17,13 +19,21 @@ import { STORAGE_KEY, initialState, restoreState, transition, profileRoute, cons
 import { getTelegram, initializeTelegram, isTelegram } from './telegram';
 import { appendMessage, isPersonNode, personFromCard, refreshPeople, showRequestRecords, syncConsentButton, syncAmount, syncComposer, syncHomeFilters, prepareChoices, localPhoto, photoUrl, type Person } from './dom';
 
-type DemoState = {payments:{id:string;amount:number;createdAt:string}[];createdDeals:Record<string,string>[];demoDealOverrides:Record<string,Record<string,string>>;profile:OwnProfile|null; relationship: Record<string, string>; recommendations: Record<string, string>; fields: Record<string, string>; consents: Record<string, boolean>; choices: Record<string, string>; person: Person | null; saved: string[]; savedPeople:Record<string,Person>; requests: { id: string; title: string; description: string; closed?:boolean }[]; selectedRequest:string|null; messages: { id: string; text: string; dealId?:string }[]; query: string; filter: string; criteria:Record<string,string>; contribution: number; amount: number; payment:{id:string;amount:number;status:string}|null; deal:Record<string,string>|null };
+type DemoState = {payments:{id:string;amount:number;createdAt:string}[];createdDeals:Record<string,string>[];demoDealOverrides:Record<string,Record<string,string>>;profile:OwnProfile|null; relationship: Record<string, string>; recommendations: Record<string, string>; fields: Record<string, string>; consents: Record<string, boolean>; choices: Record<string, string>; person: Person | null; saved: string[]; savedPeople:Record<string,Person>; requests: { id: string; title: string; description: string; closed?:boolean; status?:string; aiAssisted?:boolean; raw?:string; answer?:string; budget?:string; deadline?:string; format?:string }[]; selectedRequest:string|null; messages: { id: string; text: string; dealId?:string }[]; query: string; filter: string; criteria:Record<string,string>; contribution: number; amount: number; payment:{id:string;amount:number;status:string}|null; deal:Record<string,string>|null };
 type Action = { id: string; to: string; event?: string; delay?: number };
 const registry = capturedScreens as Record<string, () => Promise<{ default: ComponentType }>>;
+const aiCatalogScreens = [
+  {id:AI_REQUEST_ROUTES.input,name:'ИИ-запрос · описать задачу'},
+  {id:AI_REQUEST_ROUTES.clarify,name:'ИИ-запрос · уточнить результат'},
+  {id:AI_REQUEST_ROUTES.loading,name:'ИИ-запрос · подготовка'},
+  {id:AI_REQUEST_ROUTES.review,name:'ИИ-запрос · проверить и опубликовать'},
+  {id:AI_REQUEST_ROUTES.error,name:'ИИ-запрос · ошибка'},
+  {id:AI_REQUEST_ROUTES.published,name:'ИИ-запрос · опубликован'},
+];
 const HOME = '464:2016';
 const ownProfiles = new Set(['563:4968', '457:5605', '457:5722']);
 const foreignProfiles = new Set(['457:5863', '457:5992', '726:5802', '726:5915', '729:5891', '729:6028']);
-const captions: Record<string, string> = { 'Главная': HOME, 'Запросы': '503:2497', 'Сделки': '504:2892', 'Сообщество': '678:14745', 'Профиль': '563:4968', 'Найти людей': HOME, 'Создать запрос': '503:2596', 'Новый запрос': '503:2596', 'Редактировать': '500:2604', 'Редактировать профиль': '500:2604', 'Как видят другие': '457:5863', 'Рекомендовать': '487:1972', 'Фильтры': '505:3550', 'Уведомления': '505:3645', 'Пригласить участника': '505:4047', 'Мои приглашения': '505:4121', 'Оставить рекомендацию': '487:1972', 'Почему подходит Мария': '489:2295', 'Повторить': '489:2186', 'Предложить сделку':'504:2951', 'Пожаловаться':'505:3942', 'Заблокировать':'505:3982', 'Посмотреть отчёт о расходах':'488:2206', 'Вернуться к каталогу':HOME, 'Посмотреть результат':'504:3212', 'Мария откликнулась':'503:2782', 'Сделка согласована':'504:3088', 'Рекомендация опубликована':'487:1938', 'Заблокированные':'505:4017', 'Доступ к контактам':'505:3790', 'Правила и данные':'464:1714', 'Отозвать весь доступ':'505:3869', 'Отозвать приглашение':'506:4193', 'Пригласить человека':'505:4047', 'Отмена':'BACK', 'Оставить доступ':'BACK', 'Сохранить и выйти':'563:4968', 'Выйти без сохранения':'563:4968', 'Профиль автора':'457:5863', 'Андрей хочет познакомиться':'487:2068' };
+const captions: Record<string, string> = {'Создать вручную': '503:2596', 'Главная': HOME, 'Запросы': '503:2497', 'Сделки': '504:2892', 'Сообщество': '678:14745', 'Профиль': '563:4968', 'Найти людей': HOME, 'Создать запрос': '503:2596', 'Новый запрос': '503:2596', 'Редактировать': '500:2604', 'Редактировать профиль': '500:2604', 'Как видят другие': '457:5863', 'Рекомендовать': '487:1972', 'Фильтры': '505:3550', 'Уведомления': '505:3645', 'Пригласить участника': '505:4047', 'Мои приглашения': '505:4121', 'Оставить рекомендацию': '487:1972', 'Почему подходит Мария': '489:2295', 'Повторить': '489:2186', 'Предложить сделку':'504:2951', 'Пожаловаться':'505:3942', 'Заблокировать':'505:3982', 'Посмотреть отчёт о расходах':'488:2206', 'Вернуться к каталогу':HOME, 'Посмотреть результат':'504:3212', 'Мария откликнулась':'503:2782', 'Сделка согласована':'504:3088', 'Рекомендация опубликована':'487:1938', 'Заблокированные':'505:4017', 'Доступ к контактам':'505:3790', 'Правила и данные':'464:1714', 'Отозвать весь доступ':'505:3869', 'Отозвать приглашение':'506:4193', 'Пригласить человека':'505:4047', 'Отмена':'BACK', 'Оставить доступ':'BACK', 'Сохранить и выйти':'563:4968', 'Выйти без сохранения':'563:4968', 'Профиль автора':'457:5863', 'Андрей хочет познакомиться':'487:2068' };
 const behaviors = new Map(behaviorData.map(s => [s.id, s.actions as Action[]]));
 const controls = new Map(controlData.map(s => [s.id, s.controls]));
 const find = (root: Element, id: string) => root.querySelector<HTMLElement>(`[data-node-id="${CSS.escape(id)}"]`);
@@ -167,6 +177,7 @@ export function Prototype() {
 
   const initializeView = useCallback(() => {
     const el = stage.current; if (!el || !el.firstElementChild || el.querySelector('.loading-placeholder')) return;
+    if (isAiRequestRoute(route)) { setLoaded(true); return; }
     fitToViewport(el, frame);
     if(!frame)for(const sheet of el.querySelectorAll<HTMLElement>('[data-name*="нижняя панель"],[data-name$="· панель"]')){if(sheet===el.firstElementChild)continue;sheet.classList.add('prototype-sheet');for(const close of sheet.querySelectorAll<HTMLElement>('[data-name*="x-close"]')){close.dataset.back='true';close.setAttribute('role','button');close.setAttribute('aria-label','Закрыть');close.tabIndex=0;close.classList.add('sheet-close');}}
     for (const a of behaviors.get(route) || []) { const n = find(el, a.id); if (n && a.event !== 'AFTER_TIMEOUT') { n.setAttribute('role', 'button'); n.tabIndex = 0; } }
@@ -213,6 +224,13 @@ export function Prototype() {
       refreshPeople(el,route,stateRef.current);
       showRequestRecords(el,route,stateRef.current.requests,stateRef.current.selectedRequest);
       prepareRequestCards(el,route);showSelectedRequest(el,route,stateRef.current.selectedRequest);
+      appendAiRequestEntries(el, route);
+      if (route === '489:2257' && stateRef.current.fields['ai-request-match']) {
+        const prompt = find(el,'496:2381');
+        if (prompt) { prompt.textContent = stateRef.current.fields['ai-request-match']; prompt.style.height='auto'; }
+        const bubble = el.querySelector<HTMLElement>('[data-name="Сообщение участника"]');
+        if (bubble) { bubble.style.height='auto'; bubble.style.minHeight='44px'; if(bubble.parentElement)bubble.parentElement.style.height='auto'; }
+      }
       if(['503:2497','503:2728','503:2842'].includes(route))prepareRequestTabs(el,route);
       syncConsentButton(el,route,stateRef.current.consents);
       if(route==='488:2076'){const value=find(el,'488:2113');makeInput(value,'custom-amount','Другая сумма');const input=el.querySelector<HTMLInputElement>('[data-field="custom-amount"]');if(input){input.dataset.amount='true';input.inputMode='numeric';input.value='';}syncAmount(el,stateRef.current.amount);}
@@ -265,6 +283,19 @@ export function Prototype() {
 
   const activate = useCallback((target: HTMLElement) => {
     const root = stage.current; if (!root || target.closest('input,textarea,select,.connection-cta[aria-disabled=true],.connection-cta[aria-busy=true]')) return;
+    if (target.closest('[data-ai-request-entry]')) {
+      const draft = restoreAiSession('');
+      const inputs = [...root.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('.prototype-input')];
+      const record = stateRef.current.requests.find(r => r.id === stateRef.current.selectedRequest);
+      const value = (name: string) => inputs.find(i => i.getAttribute('aria-label')?.startsWith(name))?.value || '';
+      const session = { ...draft, id: crypto.randomUUID(), returnTo: route,
+        raw: ['503:2596','503:2896'].includes(route) ? value('Задача') : '',
+        title: ['503:2596','503:2896'].includes(route) ? value('Заголовок') : '',
+        budget: value('Бюджет'), deadline: value('Срок'), format: value('Формат'),
+        originId: route === '503:2896' && record ? record.id : '' };
+      storeInput({ type: 'field', id: AI_SESSION_KEY, value: JSON.stringify(session) });
+      go(AI_REQUEST_ROUTES.input); return;
+    }
     if(route==='500:2604'&&handleProfileEditor(target)){const draft=JSON.stringify(readProfileEditor(root,stateRef.current.profile));root.dataset.dirty=String(draft!==root.dataset.profileBaseline);storeInput({type:'field',id:'profile-draft',value:root.dataset.dirty==='true'?draft:''});return;}
     if(target.closest('[data-return-own]')){dispatch({type:'person',person:null});dispatch({type:'choice',screen:'profile-preview',value:''});go('563:4968');return;}
     if(toggleProfileDetails(target)||toggleMoreExpertise(root,target))return;
@@ -306,7 +337,12 @@ export function Prototype() {
     if(route==='503:2556'&&label==='Профиль автора'){const record=stateRef.current.requests.find(r=>r.id===stateRef.current.selectedRequest);if(record){go('563:4968');return;}const request=demoRequests[stateRef.current.selectedRequest||'sample-sales'];dispatch({type:'person',person:personForName(request?.author||'Алексей Смирнов')});go('457:5863');return;}
     const incoming=target.closest<HTMLElement>('[data-incoming-reply]');if(incoming){dispatch({type:'person',person:personForName('Мария Волкова')});go('503:2782');return;}
     if(label==='Андрей хочет познакомиться'){dispatch({type:'person',person:personForName('Андрей Белов')});go('487:2068');return;}
-    const localRequest=target.closest<HTMLElement>('[data-request]');if(localRequest){dispatch({type:'selectRequest',id:localRequest.dataset.request});go('503:2556');return;}
+    const localRequest=target.closest<HTMLElement>('[data-request]');if(localRequest){
+      const record=stateRef.current.requests.find(r=>r.id===localRequest.dataset.request);
+      dispatch({type:'selectRequest',id:localRequest.dataset.request});
+      if(record?.aiAssisted){storeInput({type:'field',id:AI_SESSION_KEY,value:JSON.stringify({...restoreAiSession(''),...record,raw:record.raw||record.description,returnTo:'503:2842',originId:record.id,editedTitle:true,editedDescription:true})});go(record.status==='draft'?AI_REQUEST_ROUTES.review:AI_REQUEST_ROUTES.published);}
+      else go('503:2556');return;
+    }
     if(route==='503:2556'&&label==='Изменить запрос'&&stateRef.current.selectedRequest){go('503:2896');return;}
     if(route==='503:2653'&&label==='Отправить'){const text=root.querySelector<HTMLTextAreaElement>('textarea')?.value.trim();if(!text){say('Напишите, чем можете помочь');return;}dispatch({type:'field',id:'last-response',value:text});}
     if(route==='503:2782'&&label==='Отказать'){dispatch({type:'field',id:'incoming-response-status',value:'declined'});go('503:3027');return;}
@@ -362,6 +398,23 @@ export function Prototype() {
     if (to && !['URL', 'CLOSE', 'CHANGE_TO'].includes(to)) go(to);
   }, [route, dispatch, go, say]);
 
-  if (catalog) return <main className="screen-catalog"><h1>Экраны прототипа</h1><p>{Object.keys(registry).length} экранов перенесены из Figma.</p><input aria-label="Найти экран" placeholder="Найти экран" value={catalogQuery} onChange={e => setCatalogQuery(e.target.value)}/><div>{manifest.screens.filter(s => s.name.toLowerCase().includes(catalogQuery.toLowerCase())).map(s => <a key={s.id} href={`?screen=${encodeURIComponent(s.id)}`}><span>{s.name}</span>{!registry[s.id] && <small>Нужно сравнить</small>}</a>)}</div></main>;
-  return <div className={frame ? 'prototype-shell framed' : 'prototype-shell'}><div key={route} ref={stage} className="design-stage" data-screen={route} data-loaded={loaded} onClick={e => { if ((e.target as HTMLElement).closest('input,textarea,select')) return; e.preventDefault(); activate(e.target as HTMLElement); }} onKeyDown={e => { const target = e.target as HTMLElement; if (e.key === 'Enter' && target.matches('[data-query]')) { go('505:3464'); return; } if ((e.key === 'Enter' || e.key === ' ') && !target.matches('input,textarea,select')) { e.preventDefault(); activate(target); } }} onInput={e => { const t = e.target as HTMLInputElement; if(t.dataset.privacyScale){dispatch({type:'profile',value:{showScale:String(t.value==='Видны участникам')}});return;}if(route==='500:2604'&&t.matches('[data-profile-value],[data-custom-tag],input[type=file]')&&stage.current){const draft=JSON.stringify(readProfileEditor(stage.current,stateRef.current.profile));stage.current.dataset.dirty=String(draft!==stage.current.dataset.profileBaseline);storeInput({type:'field',id:'profile-draft',value:stage.current.dataset.dirty==='true'?draft:''});return;}if(t.dataset.amount){const n=Number(t.value.replace(/\s/g,''));const next=storeInput({type:'amount',value:Number.isFinite(n)&&n>0?n:0});if(stage.current)syncAmount(stage.current,next.amount);return;}if(route==='464:1784'&&t.dataset.field)storeInput({type:'field',id:/Имя/.test(t.getAttribute('aria-label')||'')?'onboarding-name':'onboarding-city',value:t.value});if (t.dataset.field) {storeInput(t.dataset.query ? { type: 'query', value: t.value } : { type: 'field', id: t.dataset.field, value: t.value });if(t.dataset.composer&&stage.current)syncComposer(stage.current);} }}><Suspense fallback={<div className="loading-placeholder" aria-label="Загрузка экрана"/>}>{Component ? <Component/> : <StateView id={route} go={go}/>}</Suspense></div>{notice && <div className="prototype-toast" role="status">{notice}<button aria-label="Закрыть уведомление" onClick={() => setNotice('')}>×</button></div>}</div>;
+  const aiScreen = isAiRequestRoute(route) ? <AiRequestFlow route={route} stored={stateRef.current.fields[AI_SESSION_KEY] || ''} frame={frame} go={go} say={say}
+    selected={stateRef.current.requests.find(r => r.id === stateRef.current.selectedRequest)}
+    persist={value => storeInput({ type: 'field', id: AI_SESSION_KEY, value })}
+    saveRecord={(record: AiRequestRecord) => dispatch({ type: 'saveAiRequest', record })}
+    match={description => {
+      storeInput({type:'field',id:'ai-request-match',value:description});
+      storeInput({type:'field',id:'composer:ai',value:description});
+      go(/продаж|команд|управлен|процесс|маркетинг/i.test(description)?'489:2257':'489:2329');
+    }}
+    manual={(session: AiSession) => {
+      const edit = Boolean(session.originId);
+      const ids = edit ? ['503:2920','503:2924','503:2928','503:2932'] : ['503:2620','503:2624','503:2634','503:2638','503:2644'];
+      const values = edit ? [session.title,session.description || session.raw,session.budget,session.format] : [session.title,session.description || session.raw,session.budget,session.format,session.deadline];
+      if (edit) dispatch({ type: 'selectRequest', id: session.originId });
+      ids.forEach((id,i) => storeInput({ type: 'field', id: edit ? id + ':' + session.originId : id, value: values[i] }));
+      go(edit ? '503:2896' : '503:2596');
+    }}/>: null;
+  if (catalog) return <main className="screen-catalog"><h1>Экраны прототипа</h1><p>{Object.keys(registry).length + aiCatalogScreens.length} экранов перенесены из Figma.</p><input aria-label="Найти экран" placeholder="Найти экран" value={catalogQuery} onChange={e => setCatalogQuery(e.target.value)}/><div>{[...manifest.screens,...aiCatalogScreens].filter(s => s.name.toLowerCase().includes(catalogQuery.toLowerCase())).map(s => <a key={s.id} href={`?screen=${encodeURIComponent(s.id)}`}><span>{s.name}</span>{!registry[s.id] && !isAiRequestRoute(s.id) && <small>Нужно сравнить</small>}</a>)}</div></main>;
+  return <div className={frame ? 'prototype-shell framed' : 'prototype-shell'}><div key={route} ref={stage} className="design-stage" data-screen={route} data-loaded={loaded} onClick={e => { if ((e.target as HTMLElement).closest('input,textarea,select')) return; e.preventDefault(); activate(e.target as HTMLElement); }} onKeyDown={e => { const target = e.target as HTMLElement; if (e.key === 'Enter' && target.matches('[data-query]')) { go('505:3464'); return; } if ((e.key === 'Enter' || e.key === ' ') && !target.matches('input,textarea,select')) { e.preventDefault(); activate(target); } }} onInput={e => { const t = e.target as HTMLInputElement; if(t.dataset.privacyScale){dispatch({type:'profile',value:{showScale:String(t.value==='Видны участникам')}});return;}if(route==='500:2604'&&t.matches('[data-profile-value],[data-custom-tag],input[type=file]')&&stage.current){const draft=JSON.stringify(readProfileEditor(stage.current,stateRef.current.profile));stage.current.dataset.dirty=String(draft!==stage.current.dataset.profileBaseline);storeInput({type:'field',id:'profile-draft',value:stage.current.dataset.dirty==='true'?draft:''});return;}if(t.dataset.amount){const n=Number(t.value.replace(/\s/g,''));const next=storeInput({type:'amount',value:Number.isFinite(n)&&n>0?n:0});if(stage.current)syncAmount(stage.current,next.amount);return;}if(route==='464:1784'&&t.dataset.field)storeInput({type:'field',id:/Имя/.test(t.getAttribute('aria-label')||'')?'onboarding-name':'onboarding-city',value:t.value});if (t.dataset.field) {storeInput(t.dataset.query ? { type: 'query', value: t.value } : { type: 'field', id: t.dataset.field, value: t.value });if(t.dataset.composer&&stage.current)syncComposer(stage.current);} }}><Suspense fallback={<div className="loading-placeholder" aria-label="Загрузка экрана"/>}>{aiScreen || (Component ? <Component/> : <StateView id={route} go={go}/>)}</Suspense></div>{notice && <div className="prototype-toast" role="status">{notice}<button aria-label="Закрыть уведомление" onClick={() => setNotice('')}>×</button></div>}</div>;
 }
