@@ -15,7 +15,7 @@ try{
    const candidates=[...document.querySelectorAll('[data-name*="CTA"],[data-name="Сохранить изменения профиля"]')];
    return {count:candidates.length,issues:candidates.filter(n=>{
     const label=n.querySelector('.connection-label'),action=n.querySelector('.connection-action');
-    return !n.classList.contains('connection-cta')||!n.querySelector('.connection-glass svg [data-glass-outline]')||!label||!action||label.getBoundingClientRect().height!==64||action.getBoundingClientRect().width!==64;
+    return !n.classList.contains('connection-cta')||!n.querySelector('.connection-glass svg [data-glass-outline]')||!label||!action||!getComputedStyle(label).fontFamily.includes('Onest')||label.getBoundingClientRect().height!==64||action.getBoundingClientRect().width!==64;
    }).map(n=>n.dataset.nodeId)};
   });
   count+=result.count;if(result.issues.length)issues.push({id,issues:result.issues});

@@ -198,6 +198,14 @@
       "values": {
         "613:0": 24
       }
+    },
+    {
+      "id": "VariableID:830:11002",
+      "name": "Button/Font family",
+      "type": "STRING",
+      "values": {
+        "830:0": "Onest"
+      }
     }
   ],
   "styles": [
@@ -365,7 +373,7 @@
       "id": "S:ab5d1035933b650a00dc5944677ed1ed6781163d,",
       "name": "THE MISSION/Button/Primary",
       "font": {
-        "family": "IBM Plex Mono",
+        "family": "Onest",
         "style": "SemiBold"
       },
       "size": 17,

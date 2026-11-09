@@ -1,4 +1,4 @@
-/* Figma 478:1851 — approved «Связь», 64px, IBM Plex Mono 17/24. */
+/* Figma 478:1851 — approved «Связь», 64px, Onest SemiBold 17/24. */
 .prototype-shell .connection-cta,
 .prototype-shell .ai-connection {
   --connection-surface: var(--tm-accent-primary, #10b981);
@@ -51,7 +51,7 @@
   border-radius: var(--connection-radius);
   background: var(--connection-surface) !important;
   color: var(--connection-ink) !important;
-  font: 600 17px/24px 'IBM Plex Mono', monospace !important;
+  font: 600 17px/24px var(--tm-button-font-family, Onest), sans-serif !important;
   letter-spacing: 0 !important;
   text-transform: uppercase;
   text-align: left;
