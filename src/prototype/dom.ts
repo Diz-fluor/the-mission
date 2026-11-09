@@ -66,13 +66,13 @@ export function appendMessage(root: HTMLElement, text: string) {
  let list=root.querySelector('.prototype-messages');if(!list){list=document.createElement('div');list.className='prototype-messages';(root.querySelector('[data-name*="Контент"]')||root.firstElementChild)?.append(list);}
  const p=document.createElement('p');p.textContent=text;list.append(p);p.scrollIntoView({block:'nearest'});
 }
-export function showRequestRecords(root: HTMLElement, route: string, requests: {id:string;title:string;description:string;closed?:boolean}[], selected: string|null) {
+export function showRequestRecords(root: HTMLElement, route: string, requests: {id:string;title:string;description:string;closed?:boolean;status?:string}[], selected: string|null) {
  const record=requests.find(r=>r.id===selected);
  if (record && ['503:2556','503:2896'].includes(route)) for (const p of root.querySelectorAll('p')) { if (normalizedText(p.textContent).startsWith('Нужен руководитель продаж')||normalizedText(p.textContent)==='Руководитель продаж') p.textContent=record.title; if (normalizedText(p.textContent).includes('Запустить отдел продаж')||normalizedText(p.textContent).startsWith('Нужны процессы, воронка')) p.textContent=record.description; }
  if(record&&route==='503:2556')for(const p of root.querySelectorAll('p'))if(normalizedText(p.textContent)==='Откликнуться')p.textContent='Изменить запрос';
  if (!['503:2842','503:2497'].includes(route)) return;
  const container=root.querySelector('[data-name^="Содержание"] [data-name="Контент"]')||root.querySelector('[data-name^="Содержание"]');if(!container)return;
- for(const r of requests){const button=document.createElement('button');button.className='local-request';button.dataset.request=r.id;const title=document.createElement('strong');title.textContent=r.title;const p=document.createElement('p');p.textContent=r.description;button.append(title,p);if(r.closed){const status=document.createElement('small');status.textContent='Закрыт';button.append(status);}container.append(button);}
+ for(const r of requests){if(route==='503:2497'&&(r.status==='draft'||r.closed))continue;const button=document.createElement('button');button.className='local-request';button.dataset.request=r.id;const title=document.createElement('strong');title.textContent=r.status==='draft'?'Черновик · '+r.title:r.title;const p=document.createElement('p');p.textContent=r.description;button.append(title,p);if(r.closed||r.status==='draft'){const status=document.createElement('small');status.textContent=r.closed?'Закрыт':'Виден только вам · продолжить';button.append(status);}container.append(button);}
 }
 const normalizedText=(text:string|null)=>text?.replace(/\s+/g,' ').trim()||'';
 export function syncConsentButton(root:HTMLElement,route:string,consents:Record<string,boolean>){
